@@ -1,0 +1,26 @@
+package com.proyecto_backend.demoAPI.servicios.dtos;
+
+import java.time.LocalDate;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class UsuarioDTO {
+
+    private Long idUsuario;
+    private String nombre;
+    private String apellido;
+    private String correo;
+    private String celular;
+    private LocalDate fechaCreacion;
+    private Boolean estaActivo;
+    private Long idOrganizacion;
+    private Long idRol;
+    
+}
