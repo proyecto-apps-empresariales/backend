@@ -1,7 +1,6 @@
 package com.proyecto_backend.demoAPI.servicios.dtos;
 
-import java.time.LocalDate;
-
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,16 +10,16 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioDTO {
+public class UsuarioUpdateDTO {
 
-    private Long idUsuario;
     private String nombre;
     private String apellido;
-    private String correo;
+    private String contrasena;
     private String celular;
-    private LocalDate fechaCreacion;
     private Boolean estaActivo;
+    @Positive
     private Long idOrganizacion;
+    @Positive
     private Long idRol;
     
 }
