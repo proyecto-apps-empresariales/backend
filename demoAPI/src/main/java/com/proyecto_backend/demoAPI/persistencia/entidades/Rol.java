@@ -19,6 +19,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Rol {
 
+    // Atributos de la clase Rol:
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_rol")
