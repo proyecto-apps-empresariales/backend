@@ -11,17 +11,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioDTO {
-
-    // Atributos de la clase UsuarioDTO:
-    private Long idUsuario;
-    private String nombre;
-    private String apellido;
-    private String correo;
-    private String celular;
-    private LocalDate fechaCreacion;
-    private Boolean estaActivo;
-    private Long idOrganizacion;
-    private Long idRol;
+public class OrganizacionDTO {
     
+    // Atributos de la clase OrganizacionDTO:
+    private Long idOrganizacion;
+    private String nombre;
+    private String descripcion;
+    private LocalDate fechaCreacion;
 }

@@ -24,6 +24,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Usuario {
 
+    // Atributos de la clase Usuario:
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")

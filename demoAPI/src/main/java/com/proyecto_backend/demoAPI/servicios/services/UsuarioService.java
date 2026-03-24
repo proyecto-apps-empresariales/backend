@@ -35,54 +35,61 @@ public class UsuarioService {
     public UsuarioDTO guardarUsuario(UsuarioCreateDTO dto) {
 
         if (dto == null) { // 400 BAD_REQUEST: Datos No validos
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuario no valido");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datos no valido");
         }
 
         if (usuarioRepository.findByCorreo(dto.getCorreo()).isPresent()) { // 409 CONFLICT: Dato ya existente
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Correo ya registrado");
         }
+
         Organizacion organizacion = buscarOrganizacion(dto.getIdOrganizacion());
         Rol rol = buscarRol(dto.getIdRol());
 
-        Usuario usuarioNuevo = UsuarioMapper.dtoToEntity(dto);
+        Usuario usuarioNuevo = UsuarioMapper.toEntity(dto);
 
         usuarioNuevo.setFechaCreacion(LocalDate.now());
         usuarioNuevo.setEstaActivo(true);
         usuarioNuevo.setOrganizacion(organizacion);
         usuarioNuevo.setRol(rol);
 
-        return UsuarioMapper.usuarioToDTO(usuarioRepository.save(usuarioNuevo));
+        return UsuarioMapper.toDTO(usuarioRepository.save(usuarioNuevo));
     }
 
     // Metodo para obtener la lista de todos los usuarios:
-    public List<UsuarioDTO> getUsuarios() {
+    public List<UsuarioDTO> listaUsuarios() {
 
-        return usuarioRepository.findAll().stream().map(UsuarioMapper::usuarioToDTO).toList();
+        return UsuarioMapper.toDTOList(usuarioRepository.findAll());
+    }
+
+    // Metodo para obtener un usuario por medio de su id:
+    public UsuarioDTO buscarUsuarioPorId (Long idUsuario) {
+
+        return UsuarioMapper.toDTO(buscarUsuarioId(idUsuario));
     }
 
     // Metodo para obtener un usuario por medio de su correo:
-    public UsuarioDTO getUsuarioByCorreo(String correo) {
+    public UsuarioDTO buscarUsuarioPorCorreo(String correo) {
 
-        return UsuarioMapper.usuarioToDTO(buscarUsuarioPorCorreo(correo));
+        return UsuarioMapper.toDTO(buscarUsuarioCorreo(correo));
     }
 
     // Metodo para obtener la lista de usuarios por Organizacion:
-    public List<UsuarioDTO> getUsuariosByOrganizacion(Long idOrganizacion) {
+    public List<UsuarioDTO> listaUsuariosPorOrganizacion(Long idOrganizacion) {
 
         buscarOrganizacion(idOrganizacion);
 
-        return usuarioRepository.findByOrganizacion_IdOrganizacion(idOrganizacion).stream()
-                .map(UsuarioMapper::usuarioToDTO).toList();
+        return UsuarioMapper.toDTOList(usuarioRepository.findByOrganizacion_IdOrganizacion(idOrganizacion));
     }
 
     // Metodo para actualizar un usuario:
     @Transactional
-    public UsuarioDTO actualizarUsuario(UsuarioUpdateDTO dto, Long id) {
+    public UsuarioDTO actualizarUsuario (UsuarioUpdateDTO dto, Long id) {
 
         if (dto == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datos no validos");
         }
-        Usuario usuario = buscarUsuarioPorId(id);
+
+        Usuario usuario = buscarUsuarioId(id);
 
         if (dto.getNombre() != null) {
             usuario.setNombre(dto.getNombre());
@@ -106,14 +113,14 @@ public class UsuarioService {
             usuario.setRol(buscarRol(dto.getIdRol()));
         }
 
-        return UsuarioMapper.usuarioToDTO(usuarioRepository.save(usuario));
+        return UsuarioMapper.toDTO(usuarioRepository.save(usuario));
     }
 
-    // Metodo para eliminar un usuario por medio de un UsuarioDeletedDTO:
+    // Metodo para eliminar un usuario:
     @Transactional
     public void eliminarUsuario(Long idUsuario) {
-
-        usuarioRepository.delete(buscarUsuarioPorId(idUsuario));
+        
+        usuarioRepository.delete(buscarUsuarioId(idUsuario));
     }
 
     // Metodo privado para buscar una organizacion por ID:
@@ -122,6 +129,7 @@ public class UsuarioService {
         if (idOrganizacion == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID no valida");
         }
+
         return organizacionRepository.findById(idOrganizacion)  // 404 NOT_FOUND: Recurso no existe
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Organizacion no encontrado"));
     }
@@ -132,26 +140,29 @@ public class UsuarioService {
         if (idRol == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID no valido");
         }
+
         return rolRepository.findById(idRol)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rol no encontrado"));
     }
 
     // Metodo privado para buscar un usuario por ID:
-    private Usuario buscarUsuarioPorId(Long idUsuario) {
+    private Usuario buscarUsuarioId(Long idUsuario) {
 
         if (idUsuario == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID no valido");
         }
+
         return usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
     }
 
     // Metodo privado para buscar un usuario por correo:
-    private Usuario buscarUsuarioPorCorreo(String correo) {
+    private Usuario buscarUsuarioCorreo(String correo) {
 
         if (correo == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Correo no valido");
         }
+        
         return usuarioRepository.findByCorreo(correo)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
     }
