@@ -9,7 +9,7 @@ import com.proyecto_backend.demoAPI.servicios.dtos.UsuarioDTO;
 public class UsuarioMapper {
 
     // Metodo para convertir un Usuario --> UsuarioDTO:
-    public static UsuarioDTO toDTO(Usuario usuario) {
+    public static UsuarioDTO toDTO (Usuario usuario) {
         if (usuario == null) {
             return null;
         }
@@ -29,7 +29,7 @@ public class UsuarioMapper {
     }
 
     // Metodo para convertir un UsuarioCreateDTO --> Usuario:
-    public static Usuario toEntity(UsuarioCreateDTO dto) {
+    public static Usuario toEntity (UsuarioCreateDTO dto) {
 
         Usuario usuario = new Usuario();
         usuario.setNombre(dto.getNombre());
