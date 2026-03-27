@@ -1,9 +1,11 @@
-package com.proyecto_backend.persistencia.entidades;
+package com.proyecto_backend.demoAPI.persistencia.entidades;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 
 @Entity
@@ -11,14 +13,19 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TipoPeticionFlujo {
+public class RequerimientoPeticion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_requerimiento_peticion")
     private Long id;
+
+    @Column(nullable = false)
     private String nombre;
+
+    @Column(nullable = false)
     private String descripcion;
-    @Column(name = "instrucciones_pdf")
-    private String instruccionesPdf;
+
+    @ManyToMany(mappedBy = "requerimientos", fetch = FetchType.LAZY)
+    private List<TipoPeticionFlujo> tipoPeticiones;
 }
