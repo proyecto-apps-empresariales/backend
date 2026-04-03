@@ -1,6 +1,5 @@
 package com.proyecto_backend.demoAPI.businessLayer.dtos;
 
-import com.proyecto_backend.demoAPI.persistanceLayer.entidades.PeticionFlujoEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

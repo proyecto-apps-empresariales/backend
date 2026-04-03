@@ -31,7 +31,7 @@ public class UsuarioController {
 
     // Endpoint para guardar un usuario:
     @PostMapping
-    public ResponseEntity<UsuarioDTO> guardarUsuario(@Valid @RequestBody UsuarioCreateDTO dto) {
+    public ResponseEntity<UsuarioDTO> guardarUsuario (@Valid @RequestBody UsuarioCreateDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.guardarUsuario(dto));
     }
 
@@ -43,32 +43,32 @@ public class UsuarioController {
 
     // Endpoint para buscar un usuario por id:
     @GetMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> buscarUsuarioPorId(@PathVariable Long idUsuario) {
+    public ResponseEntity<UsuarioDTO> buscarUsuarioPorId (@PathVariable Long idUsuario) {
         return ResponseEntity.ok(usuarioService.buscarUsuarioPorId(idUsuario));
     }
 
     // Endpoint para buscar un usuario por correo:
     @GetMapping("/correo/{correoUsuario}")
-    public ResponseEntity<UsuarioDTO> buscarUsuarioPorCorreo(@PathVariable String correoUsuario) {
+    public ResponseEntity<UsuarioDTO> buscarUsuarioPorCorreo (@PathVariable String correoUsuario) {
         return ResponseEntity.ok(usuarioService.buscarUsuarioPorCorreo(correoUsuario));
     }
 
     // Endpoint para retornar lista de usuarios por organizacion:
     @GetMapping("/organizacion/{idOrganizacion}")
-    public ResponseEntity<List<UsuarioDTO>> listaUsuariosPorOrganizacion(@PathVariable Long idOrganizacion) {
+    public ResponseEntity<List<UsuarioDTO>> listaUsuariosPorOrganizacion (@PathVariable Long idOrganizacion) {
         return ResponseEntity.ok(usuarioService.listaUsuariosPorOrganizacion(idOrganizacion));
     }
 
     // Endpoint para actualizar un usuario:
     @PutMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> actualizarUsuario(@Valid @RequestBody UsuarioUpdateDTO dto,
+    public ResponseEntity<UsuarioDTO> actualizarUsuario (@Valid @RequestBody UsuarioUpdateDTO dto,
             @PathVariable Long idUsuario) {
         return ResponseEntity.ok(usuarioService.actualizarUsuario(dto, idUsuario));
     }
 
     // Endpoint para eliminar un usuario:
     @DeleteMapping("/{idUsuario}")
-    public ResponseEntity<Void> eliminarUsuario(@PathVariable Long idUsuario) {
+    public ResponseEntity<Void> eliminarUsuario (@PathVariable Long idUsuario) {
         usuarioService.eliminarUsuario(idUsuario);
         return ResponseEntity.noContent().build();
     }

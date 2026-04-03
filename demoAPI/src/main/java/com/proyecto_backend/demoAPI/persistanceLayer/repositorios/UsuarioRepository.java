@@ -11,7 +11,7 @@ import com.proyecto_backend.demoAPI.persistanceLayer.entidades.Usuario;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
-    // Metodo para buscar una organizacion por ID:
+    // Metodo para buscar usuarios por una organizacion:
     public List<Usuario> findByOrganizacion_IdOrganizacion (Long idOrganizacion);
 
     // Metodo para buscar un usuario por correo:
