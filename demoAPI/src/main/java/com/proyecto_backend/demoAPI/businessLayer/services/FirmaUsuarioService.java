@@ -10,11 +10,11 @@ import org.springframework.web.server.ResponseStatusException;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.FirmaUsuarioCreateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.FirmaUsuarioDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.FirmaUsuarioUpdateDTO;
-import com.proyecto_backend.demoAPI.persistanceLayer.mappers.FirmaUsuarioMapper;
-import com.proyecto_backend.demoAPI.persistanceLayer.entidades.Usuario;
-import com.proyecto_backend.demoAPI.persistanceLayer.entidades.FirmaUsuario;
-import com.proyecto_backend.demoAPI.persistanceLayer.repositorios.FirmaUsuarioRepository;
-import com.proyecto_backend.demoAPI.persistanceLayer.repositorios.UsuarioRepository;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.FirmaUsuario;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.Usuario;
+import com.proyecto_backend.demoAPI.persistenceLayer.mappers.FirmaUsuarioMapper;
+import com.proyecto_backend.demoAPI.persistenceLayer.repositories.FirmaUsuarioRepository;
+import com.proyecto_backend.demoAPI.persistenceLayer.repositories.UsuarioRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
