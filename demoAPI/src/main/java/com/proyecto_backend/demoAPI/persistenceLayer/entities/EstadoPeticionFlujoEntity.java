@@ -17,7 +17,7 @@ public class EstadoPeticionFlujoEntity {
     @Column(name = "id_estado_peticion_flujo")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nombre;
 
     @Column(nullable = false)
