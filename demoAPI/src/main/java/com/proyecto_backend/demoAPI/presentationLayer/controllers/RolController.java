@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.RolCreateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.RolDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.RolUpdateDTO;
-import com.proyecto_backend.demoAPI.businessLayer.services.RolService;
+import com.proyecto_backend.demoAPI.businessLayer.services.IRolService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class RolController {
 
     // Creamos las instancias de los servicios correspondientes:
-    private final RolService rolService;
+    private final IRolService rolService;
 
     // Endpoint para guardar un rol:
     @PostMapping

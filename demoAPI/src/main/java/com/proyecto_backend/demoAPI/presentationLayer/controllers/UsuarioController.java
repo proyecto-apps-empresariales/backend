@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.proyecto_backend.demoAPI.businessLayer.dtos.UsuarioCreateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.UsuarioDTO;
+import com.proyecto_backend.demoAPI.businessLayer.dtos.UsuarioUpdateContrasenaDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.UsuarioUpdateDTO;
-import com.proyecto_backend.demoAPI.businessLayer.services.UsuarioService;
+import com.proyecto_backend.demoAPI.businessLayer.services.IUsuarioService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioController {
 
     // Creamos las instancias de los servicios correspondientes:
-    private final UsuarioService usuarioService;
+    private final IUsuarioService usuarioService;
 
     // Endpoint para guardar un usuario:
     @PostMapping
@@ -53,6 +54,12 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.buscarUsuarioPorCorreo(correoUsuario));
     }
 
+    // Metodo para obtener un usuario por medio de su correo y contrasena:
+    @GetMapping("/login/{correoUsuario}/{contrasenaUsuario}")
+    public ResponseEntity<UsuarioDTO> loginUsuario (@PathVariable String correoUsuario, @PathVariable String contrasenaUsuario) {
+        return ResponseEntity.ok(usuarioService.buscarUsuarioPorCorreoYContrasena(correoUsuario, contrasenaUsuario));
+    }
+
     // Endpoint para retornar lista de usuarios por organizacion:
     @GetMapping("/organizacion/{idOrganizacion}")
     public ResponseEntity<List<UsuarioDTO>> listaUsuariosPorOrganizacion (@PathVariable Long idOrganizacion) {
@@ -64,6 +71,12 @@ public class UsuarioController {
     public ResponseEntity<UsuarioDTO> actualizarUsuario (@Valid @RequestBody UsuarioUpdateDTO dto,
             @PathVariable Long idUsuario) {
         return ResponseEntity.ok(usuarioService.actualizarUsuario(dto, idUsuario));
+    }
+
+    // Endpoint para actualizar la contrasena de un usuario:
+    @PutMapping("/contrasena")
+    public ResponseEntity<UsuarioDTO> actualizarContrasena (@Valid @RequestBody UsuarioUpdateContrasenaDTO dto) {
+        return ResponseEntity.ok(usuarioService.actualizarContrasena(dto));
     }
 
     // Endpoint para eliminar un usuario:

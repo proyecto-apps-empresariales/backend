@@ -9,12 +9,12 @@ import org.springframework.stereotype.Repository;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.FirmaUsuario;
 
 @Repository
-public interface FirmaUsuarioRepository extends JpaRepository<FirmaUsuario, Long> {
+public interface IFirmaUsuarioRepository extends JpaRepository<FirmaUsuario, Long> {
 
     // Metodo para buscar una firma por archivoFirma:
-    public Optional<FirmaUsuario> findByArchivoFirma (String archivoFirma);
+    Optional<FirmaUsuario> findByArchivoFirma (String archivoFirma);
 
     // Metodo para buscar firmas por un usuario:
-    public List<FirmaUsuario> findByUsuario_IdUsuario (Long idUsuario);
+    List<FirmaUsuario> findByUsuario_IdUsuario (Long idUsuario);
     
 }

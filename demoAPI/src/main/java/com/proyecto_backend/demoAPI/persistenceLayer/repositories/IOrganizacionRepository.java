@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.Organizacion;
 
 @Repository
-public interface OrganizacionRepository extends JpaRepository<Organizacion, Long>{
+public interface IOrganizacionRepository extends JpaRepository<Organizacion, Long>{
 
     // Metodo para buscar una organizacion por nombre:
-    public Optional<Organizacion> findByNombre (String nombre);
+    Optional<Organizacion> findByNombre (String nombre);
     
 }

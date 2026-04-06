@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.OrganizacionCreateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.OrganizacionDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.OrganizacionUpdateDTO;
-import com.proyecto_backend.demoAPI.businessLayer.services.OrganizacionService;
+import com.proyecto_backend.demoAPI.businessLayer.services.IOrganizacionService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,35 +27,35 @@ import lombok.RequiredArgsConstructor;
 public class OrganizacionController {
 
     // Creamos las instancias de los servicios correspondientes:
-    private final OrganizacionService organizacionService;
+    private final IOrganizacionService organizacionService;
 
     // Endpoint para guardar una organizacion:
     @PostMapping
-    public ResponseEntity<OrganizacionDTO> guardarOrganizacion(@Valid @RequestBody OrganizacionCreateDTO dto) {
+    public ResponseEntity<OrganizacionDTO> guardarOrganizacion (@Valid @RequestBody OrganizacionCreateDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(organizacionService.guardarOrganizacion(dto));
     }
 
     // Endpoint para retornar la lista de organizaciones:
     @GetMapping
-    public ResponseEntity<List<OrganizacionDTO>> listaOrganizaciones() {
+    public ResponseEntity<List<OrganizacionDTO>> listaOrganizaciones () {
         return ResponseEntity.ok(organizacionService.listaOrganizaciones());
     }
 
     // Endpoint para buscar una organizacion por id:
-    @GetMapping("/{idOrganizacion}")
-    public ResponseEntity<OrganizacionDTO> buscarOrganizacionPorId(@PathVariable Long idOrganizacion) {
+    @GetMapping("/id/{idOrganizacion}")
+    public ResponseEntity<OrganizacionDTO> buscarOrganizacionPorId (@PathVariable Long idOrganizacion) {
         return ResponseEntity.ok(organizacionService.buscarOrganizacionPorId(idOrganizacion));
     }
 
     // Endpoint para buscar una organizacion por nombre:
     @GetMapping("/nombre/{nombreOrganizacion}")
-    public ResponseEntity<OrganizacionDTO> buscarOrganizacionPorNombre(@PathVariable String nombreOrganizacion) {
+    public ResponseEntity<OrganizacionDTO> buscarOrganizacionPorNombre (@PathVariable String nombreOrganizacion) {
         return ResponseEntity.ok(organizacionService.buscarOrganizacionPorNombre(nombreOrganizacion));
     }
 
     // Endpoint para actualizar una organizacion:
     @PutMapping("/{idOrganizacion}")
-    public ResponseEntity<OrganizacionDTO> actualizarOrganizacion(@Valid @RequestBody OrganizacionUpdateDTO dto,
+    public ResponseEntity<OrganizacionDTO> actualizarOrganizacion (@Valid @RequestBody OrganizacionUpdateDTO dto,
             @PathVariable Long idOrganizacion) {
         return ResponseEntity.ok(organizacionService.actualizarOrganizacion(dto, idOrganizacion));
     }

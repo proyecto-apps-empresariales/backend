@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.proyecto_backend.demoAPI.businessLayer.dtos.UsuarioCreateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.UsuarioDTO;
+import com.proyecto_backend.demoAPI.businessLayer.dtos.UsuarioUpdateDTO;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.Organizacion;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.Rol;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.Usuario;
 
 public class UsuarioMapper {
@@ -15,6 +18,8 @@ public class UsuarioMapper {
         }
         Long idOrganizacion = usuario.getOrganizacion() == null ? null : usuario.getOrganizacion().getIdOrganizacion();
         Long idRol = usuario.getRol() == null ? null : usuario.getRol().getIdRol();
+        String nombreOrganizacion = usuario.getOrganizacion() == null ? null : usuario.getOrganizacion().getNombre();
+        String nombreRol = usuario.getRol() == null ? null : usuario.getRol().getNombre();
         UsuarioDTO dto = new UsuarioDTO();
         dto.setIdUsuario(usuario.getIdUsuario());
         dto.setNombre(usuario.getNombre());
@@ -22,9 +27,11 @@ public class UsuarioMapper {
         dto.setCorreo(usuario.getCorreo());
         dto.setCelular(usuario.getCelular());
         dto.setFechaCreacion(usuario.getFechaCreacion());
-        dto.setEstaActivo(usuario.getEstaActivo());
+        dto.setEstaActivo(usuario.isEstaActivo());
         dto.setIdOrganizacion(idOrganizacion);
+        dto.setNombreOrganizacion(nombreOrganizacion);
         dto.setIdRol(idRol);
+        dto.setNombreRol(nombreRol);
         return dto;
     }
 
@@ -40,6 +47,30 @@ public class UsuarioMapper {
 
         return usuario;
 
+    }
+
+    // Metodo para actualizar parcialmente una organizacion:
+    public static void updateEntityFromDTO (UsuarioUpdateDTO dto, Usuario usuario, Organizacion organizacion, Rol rol) {
+
+        if (dto.getNombre() != null) {
+            usuario.setNombre(dto.getNombre());
+        }
+        if (dto.getApellido() != null) {
+            usuario.setApellido(dto.getApellido());
+        }
+        if (dto.getCelular() != null) {
+            usuario.setCelular(dto.getCelular());
+        }
+        if (dto.getEstaActivo() != null) {
+            usuario.setEstaActivo(dto.getEstaActivo());
+        }
+        if (organizacion != null) {
+            usuario.setOrganizacion(organizacion);
+        }
+        if (rol != null) {
+            usuario.setRol(rol);
+        }
+        
     }
 
     // Metodo para convertir una lista de Usuario --> lista de UsuarioDTO:

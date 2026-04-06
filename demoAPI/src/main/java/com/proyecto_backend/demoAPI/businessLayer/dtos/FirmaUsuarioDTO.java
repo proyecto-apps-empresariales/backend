@@ -19,5 +19,6 @@ public class FirmaUsuarioDTO {
     private LocalDate fecha;
     private String descripcion;
     private Long idUsuario;
-    
+    private String nombreUsuario;
+    private String correoUsuario;
 }

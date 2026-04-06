@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.FirmaUsuarioCreateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.FirmaUsuarioDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.FirmaUsuarioUpdateDTO;
-import com.proyecto_backend.demoAPI.businessLayer.services.FirmaUsuarioService;
+import com.proyecto_backend.demoAPI.businessLayer.services.IFirmaUsuarioService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class FirmaUsuarioController {
 
     // Creamos las instancias de los servicios correspondientes:
-    private final FirmaUsuarioService firmaUsuarioService;
+    private final IFirmaUsuarioService firmaUsuarioService;
 
     // Endpoint para guardar una firmaUsuario:
     @PostMapping
