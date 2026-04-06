@@ -11,7 +11,10 @@ import com.proyecto_backend.demoAPI.persistenceLayer.entities.Usuario;
 import java.time.LocalDate;
 import java.util.List;
 
-public class PeticionFlujoMapper {
+public final class PeticionFlujoMapper {
+
+    private PeticionFlujoMapper() {
+    }
 
     //Convertir la entidad a responseDTO
     //NO se validan nulls ya que, en caso de ser nulo, el mapper debe explotar para debugear
@@ -66,7 +69,9 @@ public class PeticionFlujoMapper {
     //Se valida el nulo para que, en caso de que algo venga null, no sobreescriba el atributo en la entidad
     //Solo en update se validan nulls ya que puede ser un patch
     public static void updateEntityFromDto(PeticionFlujoUpdateDTO dto,
-                                           Usuario destinatario, TipoPeticionFlujoEntity tipoPeticion, EstadoPeticionFlujoEntity estado,
+                                           Usuario destinatario,
+                                           TipoPeticionFlujoEntity tipoPeticion,
+                                           EstadoPeticionFlujoEntity estado,
                                            LocalDate fechaFin,
                                            PeticionFlujoEntity entity) {
 

@@ -2,6 +2,8 @@ package com.proyecto_backend.demoAPI.businessLayer.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,6 +35,6 @@ public class TipoPeticionFlujoResponseDTO {
     private String instruccionesPdf;
 
     @Schema(description = "Lista de requermientos según Tipo de Petición", example = "Nombre Destinatario, Fecha creación, Firma del revisor")
-    @NotBlank(message = "La lista no puede estar vacía")
+    @NotEmpty(message = "La lista no puede estar vacía")
     private List<String> requerimientos;
 }

@@ -7,7 +7,10 @@ import com.proyecto_backend.demoAPI.persistenceLayer.entities.TipoPeticionFlujoE
 
 import java.util.List;
 
-public class TipoPeticionFlujoMapper {
+public final class TipoPeticionFlujoMapper {
+
+    private TipoPeticionFlujoMapper() {
+    }
 
     //Convertir de entidad a responseDTO
     public static TipoPeticionFlujoResponseDTO toDTO (TipoPeticionFlujoEntity entity) {
