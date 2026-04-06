@@ -6,7 +6,10 @@ import com.proyecto_backend.demoAPI.persistenceLayer.entities.RequerimientoPetic
 
 import java.util.List;
 
-public class RequerimientoPeticionMapper {
+public final class RequerimientoPeticionMapper {
+
+    private RequerimientoPeticionMapper() {
+    }
 
     //Convertir entity a responseDTO
     public static RequerimientoPeticionResponseDTO toDTO(RequerimientoPeticionEntity entity) {
@@ -34,7 +37,7 @@ public class RequerimientoPeticionMapper {
         return entity;
     }
 
-    public static void updateEntotyFromDTO(RequerimientoPeticionCreateUpdateDTO dto, RequerimientoPeticionEntity entity) {
+    public static void updateEntityFromDTO(RequerimientoPeticionCreateUpdateDTO dto, RequerimientoPeticionEntity entity) {
 
         if (dto == null || entity == null) return;
 

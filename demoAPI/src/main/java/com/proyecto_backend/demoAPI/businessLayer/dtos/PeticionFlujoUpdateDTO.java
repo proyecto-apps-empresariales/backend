@@ -1,7 +1,9 @@
 package com.proyecto_backend.demoAPI.businessLayer.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,16 +18,16 @@ import java.time.LocalDate;
 public class PeticionFlujoUpdateDTO {
 
     @Schema(description = "Id del usuario destinatario", example = "5")
+    @NotNull
     private Long destinatario;
 
     @Schema(description = "Id del tipo de la petición", example = "Cancelación de materia", accessMode = Schema.AccessMode.READ_ONLY)
+    @NotNull
     private Long tipoPeticion;
 
-    @Schema(description = "Id de la petición", example = "Enviado", accessMode = Schema.AccessMode.READ_ONLY)
-    private Long estado;
-
     @Schema(description = "Fecha de vigencia de la petición -> yyyy-MM-dd", example = "2026-10-27", accessMode = Schema.AccessMode.READ_ONLY)
-    @NotBlank(message = "La fecha de fin no puede estar vacía")
+    @NotNull(message = "La fecha de fin no puede estar vacía")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaFin;
 
     @Schema(description = "Descripción de la petición", example = "A través de esta petición, se desean cancelar 3 materias del semestre")

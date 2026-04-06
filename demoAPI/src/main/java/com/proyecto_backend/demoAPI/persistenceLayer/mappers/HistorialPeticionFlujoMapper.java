@@ -5,7 +5,10 @@ import com.proyecto_backend.demoAPI.persistenceLayer.entities.HistorialPeticionF
 
 import java.util.List;
 
-public class HistorialPeticionFlujoMapper {
+public final class HistorialPeticionFlujoMapper {
+
+    private HistorialPeticionFlujoMapper() {
+    }
 
     //Convierte la entidad a DTO -> Respuesta
     public static HistorialPeticionFlujoResponseDTO toDTO(HistorialPeticionFlujoEntity entity) {

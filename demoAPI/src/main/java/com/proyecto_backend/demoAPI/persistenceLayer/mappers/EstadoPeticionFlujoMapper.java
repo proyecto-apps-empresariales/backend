@@ -3,10 +3,15 @@ package com.proyecto_backend.demoAPI.persistenceLayer.mappers;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.EstadoPeticionFlujoCreateUpdateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.EstadoPeticionFlujoResponseDTO;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.EstadoPeticionFlujoEntity;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-public class EstadoPeticionFlujoMapper {
+public final class EstadoPeticionFlujoMapper {
+
+    //El constructor privado evita que se inyecte ya que es una clase utilitaria
+    private EstadoPeticionFlujoMapper() {
+    }
 
     //Convertir EstadoPeticionEntity a DTO
     public static EstadoPeticionFlujoResponseDTO toDTO(EstadoPeticionFlujoEntity entity) {
