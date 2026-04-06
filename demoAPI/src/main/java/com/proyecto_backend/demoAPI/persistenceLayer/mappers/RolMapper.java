@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.proyecto_backend.demoAPI.businessLayer.dtos.RolCreateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.RolDTO;
+import com.proyecto_backend.demoAPI.businessLayer.dtos.RolUpdateDTO;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.Rol;
 
 public class RolMapper {
@@ -31,6 +32,18 @@ public class RolMapper {
         rol.setDescripcion(dto.getDescripcion());
 
         return rol;
+    }
+
+    // Metodo para actualizar parcialmente un rol:
+    public static void updateEntityFromDTO (RolUpdateDTO dto, Rol rol) {
+
+        if (dto.getNombre() != null) {
+            rol.setNombre(dto.getNombre()); 
+        }
+        if (dto.getDescripcion() != null) {
+            rol.setDescripcion(dto.getDescripcion());
+        }
+        
     }
 
     // Metodo para convertir una lista de Rol --> lista de RolDTO:

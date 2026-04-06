@@ -2,6 +2,8 @@ package com.proyecto_backend.demoAPI.persistenceLayer.entities;
 
 import java.time.LocalDate;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,6 +36,7 @@ public class Organizacion {
     private String descripcion;
 
     @Column(name = "fecha_creacion", nullable = false)
+    @CreationTimestamp
     private LocalDate fechaCreacion;
     
 }

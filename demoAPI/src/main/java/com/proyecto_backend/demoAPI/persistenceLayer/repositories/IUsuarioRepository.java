@@ -9,12 +9,12 @@ import org.springframework.stereotype.Repository;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.Usuario;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+public interface IUsuarioRepository extends JpaRepository<Usuario, Long> {
 
     // Metodo para buscar usuarios por una organizacion:
-    public List<Usuario> findByOrganizacion_IdOrganizacion (Long idOrganizacion);
+    List<Usuario> findByOrganizacion_IdOrganizacion (Long idOrganizacion);
 
     // Metodo para buscar un usuario por correo:
-    public Optional<Usuario> findByCorreo (String correo);
+    Optional<Usuario> findByCorreo (String correo);
     
 }

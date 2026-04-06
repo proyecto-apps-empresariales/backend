@@ -20,8 +20,10 @@ public class UsuarioDTO {
     private String correo;
     private String celular;
     private LocalDate fechaCreacion;
-    private Boolean estaActivo;
+    private boolean estaActivo;
     private Long idOrganizacion;
+    private String nombreOrganizacion;
     private Long idRol;
+    private String nombreRol;
     
 }

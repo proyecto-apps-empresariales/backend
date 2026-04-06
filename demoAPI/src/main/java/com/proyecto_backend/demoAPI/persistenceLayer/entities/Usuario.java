@@ -2,6 +2,8 @@ package com.proyecto_backend.demoAPI.persistenceLayer.entities;
 
 import java.time.LocalDate;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -40,9 +42,10 @@ public class Usuario {
     @Column(name = "celular")
     private String celular;
     @Column(nullable = false, name = "fecha_creacion", updatable = false)
+    @CreationTimestamp
     private LocalDate fechaCreacion;
     @Column(name = "esta_activo")
-    private Boolean estaActivo;
+    private boolean estaActivo;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_organizacion")
     private Organizacion organizacion;

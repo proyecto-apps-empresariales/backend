@@ -2,6 +2,8 @@ package com.proyecto_backend.demoAPI.persistenceLayer.entities;
 
 import java.time.LocalDate;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,6 +34,7 @@ public class FirmaUsuario {
     @Column(name = "archivo_firma", nullable = false, unique = true)
     private String archivoFirma;
     @Column(name = "fecha", nullable = false, updatable = false)
+    @CreationTimestamp
     private LocalDate fecha;
     @Column(name = "descripcion")
     private String descripcion;

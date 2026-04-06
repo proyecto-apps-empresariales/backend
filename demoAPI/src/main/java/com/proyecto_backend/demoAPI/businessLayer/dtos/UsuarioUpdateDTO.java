@@ -20,8 +20,6 @@ public class UsuarioUpdateDTO {
     @Size(min = 3, max = 50)
     private String apellido;
     @Size(min = 3, max = 50)
-    private String contrasena;
-    @Size(min = 3, max = 50)
     private String celular;
     private Boolean estaActivo;
     // @Positive que sea mayor a 0.
