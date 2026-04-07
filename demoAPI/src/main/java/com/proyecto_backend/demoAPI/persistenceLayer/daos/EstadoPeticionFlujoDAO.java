@@ -58,12 +58,24 @@ public class EstadoPeticionFlujoDAO {
     }
 
     //Eliminar estado por ID
-    public boolean deelteById(Long id) {
+    public boolean deleteById(Long id) {
 
         if (estadoRepository.existsById(id)) {
             estadoRepository.deleteById(id);
             return true;
         }
         return false;
+    }
+
+    //Buscar Estado por nombre
+    public Optional<EstadoPeticionFlujoResponseDTO> findByNombre(String nombre) {
+
+        return estadoRepository.findByNombreIgnoreCase(nombre)
+                .map(EstadoPeticionFlujoMapper::toDTO);
+    }
+
+    //Verificar si el estado ya existe
+    public boolean existsByNombreIgnoreCare(String nombre) {
+        return estadoRepository.existsByNombreIgnoreCase(nombre);
     }
 }

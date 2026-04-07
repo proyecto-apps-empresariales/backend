@@ -52,5 +52,4 @@ public class HistorialPeticionFlujoDAO {
         return HistorialPeticionFlujoMapper.toDTOList(entities);
     }
 
-
 }
