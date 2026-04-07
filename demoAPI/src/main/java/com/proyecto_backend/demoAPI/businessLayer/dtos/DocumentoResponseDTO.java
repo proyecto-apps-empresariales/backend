@@ -1,0 +1,50 @@
+package com.proyecto_backend.demoAPI.businessLayer.dtos;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.TipoDocumentoEntity;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.Usuario;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDate;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Schema(description = "Informacion sobre el documento")
+public class DocumentoResponseDTO {
+
+    @Schema(description = "Id único del documento", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
+    @NotNull(message = "El id no puede estar vacio")
+    private long id;
+
+    @Schema(description = "Nombre del usuario creador del documento", example = "Juan", accessMode = Schema.AccessMode.READ_ONLY)
+    @NotBlank(message = "El nombre del usario creador no puede estar vacio")
+    private String usuarioCreador;
+
+    @Schema(description = "Nombre del tipo de documento que usa el documento", example = "Registros de sanciones sanitarias", accessMode = Schema.AccessMode.READ_ONLY)
+    @NotBlank(message = "El nombre del tipo de documento no puede estar vacio")
+    private String tipoDocumento;
+
+    @Schema(description = "Nombre del documento", example = "Informe epidemiológicos semanal - 10262026")
+    @NotBlank(message = "El nombre del documento no puede estar vacio")
+    private String nombre;
+
+    @Schema(description = "Descripcion del documento", example = "Informe epidemiológicos de la semana 2 del 10262026")
+    @NotBlank(message = "La descripcion del documento no puede estar vacio")
+    private String descripcion;
+
+    @Schema(description = "Fecha de creacion del documento -> yyyy-MM-dd", example = "2026-10-27", accessMode = Schema.AccessMode.READ_ONLY)
+    @NotNull(message = "La fecha no puede estar vacía")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaCreacion;
+}
