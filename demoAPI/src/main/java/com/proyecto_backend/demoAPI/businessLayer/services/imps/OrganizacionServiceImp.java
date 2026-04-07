@@ -82,6 +82,9 @@ public class OrganizacionServiceImp implements IOrganizacionService {
         if (idOrganizacion == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID no valido");
         }
+        if (organizacionDAO.buscarOrganizacionPorNombre(dto.getNombre()).isPresent()) { // 409 CONFLICT: Dato ya existente
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Nombre ya registrado");
+        }
 
         return organizacionDAO.actualizarOrganizacion(dto, idOrganizacion)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Organizacion no encontrada"));
