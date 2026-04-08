@@ -82,6 +82,9 @@ public class RolServiceImp implements IRolService {
         if (idRol == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID no valido");
         }
+        if (rolDAO.buscarRolPorNombre(dto.getNombre()).isPresent()) { // 409 CONFLICT: Dato ya existente
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Nombre ya registrado");
+        }
         
         return rolDAO.actualizarRol(dto, idRol)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rol no encontrado"));

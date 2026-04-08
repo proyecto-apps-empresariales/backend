@@ -97,6 +97,9 @@ public class FirmaUsuarioServiceImp implements IFirmaUsuarioService {
         if (idFirma == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID no valido");
         }
+        if (firmaUsuarioDAO.buscarFirmaPorArchivo(dto.getArchivoFirma()).isPresent()) { // 409 CONFLICT: Dato ya existente
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Nombre ya registrado");
+        }
 
         Usuario usuario = buscarUsuarioId(dto.getIdUsuario());
 
