@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name="documento")
@@ -37,5 +38,8 @@ public class DocumentoEntity {
     @Column(name="fecha_creacion", nullable = false)
     @CreationTimestamp
     private LocalDate fechaCreacion;
+
+    @OneToMany(mappedBy = "documento")
+    private List<VersionDocumentoEntity> versiones;
 
 }
