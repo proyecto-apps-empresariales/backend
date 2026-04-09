@@ -84,7 +84,7 @@ public class GlobalExceptionHandler {
     // ===============================
     // ERROR 401 - NO AUTENTICADO -> FALTA INICIAR SESIÓN
     // ===============================
-    @ExceptionHandler(ConflictException.class)
+    @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<Map<String, Object>> handleUnauthorized(UnauthorizedException ex) {
 
         Map<String, Object> response = new HashMap<>();
@@ -98,7 +98,7 @@ public class GlobalExceptionHandler {
     // ===============================
     // ERROR 403 - NO AUTORIZADO -> FALTAN PERMISOS
     // ===============================
-    @ExceptionHandler(ConflictException.class)
+    @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<Map<String, Object>> handleForbidden(ForbiddenException ex) {
 
         Map<String, Object> response = new HashMap<>();
