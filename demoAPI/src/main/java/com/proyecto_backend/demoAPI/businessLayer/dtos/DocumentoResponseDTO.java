@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,10 +38,12 @@ public class DocumentoResponseDTO {
 
     @Schema(description = "Nombre del documento", example = "Informe epidemiológicos semanal - 10262026")
     @NotBlank(message = "El nombre del documento no puede estar vacio")
+    @Size(max = 50, message = "Debe tener máximo 50 caracteres")
     private String nombre;
 
     @Schema(description = "Descripcion del documento", example = "Informe epidemiológicos de la semana 2 del 10262026")
     @NotBlank(message = "La descripcion del documento no puede estar vacio")
+    @Size(max = 250, message = "Debe tener máximo 250 caracteres")
     private String descripcion;
 
     @Schema(description = "Fecha de creacion del documento -> yyyy-MM-dd", example = "2026-10-27", accessMode = Schema.AccessMode.READ_ONLY)

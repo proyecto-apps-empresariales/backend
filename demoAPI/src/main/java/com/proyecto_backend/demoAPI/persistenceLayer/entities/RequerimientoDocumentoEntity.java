@@ -8,15 +8,15 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name="tipo_documento")
 @Data
+@Table(name="requerimiento")
 @AllArgsConstructor
 @NoArgsConstructor
-public class TipoDocumentoEntity {
+public class RequerimientoDocumentoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id_tipo_documento")
+    @Column(name="id_requerimiento")
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -25,5 +25,6 @@ public class TipoDocumentoEntity {
     @Column(nullable = false)
     private String descripcion;
 
-    private List<RequerimientoDocumentoEntity> requerimientos;
+    @ManyToMany(mappedBy = "requerimientos", fetch = FetchType.LAZY)
+    private List<TipoDocumentoEntity> tipoDocumentos;
 }

@@ -10,6 +10,7 @@ import java.time.LocalDate;
 
 @Entity
 @Data
+@Table(name="version_documento")
 @NoArgsConstructor
 @AllArgsConstructor
 public class VersionDocumentoEntity {

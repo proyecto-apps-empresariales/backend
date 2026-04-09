@@ -9,7 +9,7 @@ import com.proyecto_backend.demoAPI.persistenceLayer.entities.TipoDocumentoEntit
 
 import java.util.List;
 
-public class DocumentoMapper {
+public final class DocumentoMapper {
 
     //El constructor privado evita que se inyecte ya que es una clase utilitaria
     private DocumentoMapper(){}
