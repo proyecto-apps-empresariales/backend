@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface IPeticionFlujoRepository extends JpaRepository<PeticionFlujoEntity, Long> {
 
-    List<PeticionFlujoEntity> findByRemitenteId(Long id);
+    List<PeticionFlujoEntity> findByRemitenteIdUsuario(Long id);
 
 }

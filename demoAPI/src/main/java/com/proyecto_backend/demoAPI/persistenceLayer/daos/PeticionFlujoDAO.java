@@ -100,7 +100,7 @@ public class PeticionFlujoDAO {
     //Buscar peticiones pero el id del remitente
     public List<PeticionFlujoResponseDTO> findByRemitenteId(Long id) {
 
-        List<PeticionFlujoEntity> entities = peticionRepository.findByRemitenteId(id);
+        List<PeticionFlujoEntity> entities = peticionRepository.findByRemitenteIdUsuario(id);
         return PeticionFlujoMapper.toDTOList(entities);
     }
 
