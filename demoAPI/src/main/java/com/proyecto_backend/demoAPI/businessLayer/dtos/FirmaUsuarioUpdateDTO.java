@@ -1,5 +1,6 @@
 package com.proyecto_backend.demoAPI.businessLayer.dtos;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -11,16 +12,19 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "DTO para actualizar la información de una Firma de Usuario")
 public class FirmaUsuarioUpdateDTO {
 
-    // Atributos de la clase FirmaUsuarioCreateDTO:
-    // @Size(min = m, max = n) valida que el atributo tenga minimo m y maximo n caracteres.
-    @Size(min = 3, max = 255)
+    @Schema(description = "Archivo de la firma del usuario", example = "firma_usuario.pdf")
+    @Size(min = 3, max = 255, message = "Debe tener entre 3 y 255 caracteres")
     private String archivoFirma;
-    @Size(min = 3, max = 250)
+
+    @Schema(description = "Descripción de la firma del usuario", example = "Firma digital actualizada para documentos oficiales")
+    @Size(min = 3, max = 250, message = "Debe tener entre 3 y 250 caracteres")
     private String descripcion;
-    // @Positive que sea mayor a 0.
-    @Positive
+
+    @Schema(description = "Identificador del usuario asociado a la firma", example = "101")
+    @Positive(message = "El idUsuario debe ser mayor a 0")
     private Long idUsuario;
-    
+
 }
