@@ -2,9 +2,9 @@ package com.proyecto_backend.demoAPI.businessLayer.services;
 
 import com.proyecto_backend.demoAPI.businessLayer.dtos.EstadoPeticionFlujoCreateUpdateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.EstadoPeticionFlujoResponseDTO;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.EstadoPeticionFlujoEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IEstadoPeticionFlujoService {
 
@@ -20,5 +20,6 @@ public interface IEstadoPeticionFlujoService {
 
     public void deleteEstado(Long id);
 
+    public EstadoPeticionFlujoEntity getEstadoEntityById(Long id);
 
 }

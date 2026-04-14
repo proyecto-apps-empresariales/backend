@@ -24,7 +24,8 @@ public class PeticionFlujoDAO {
 
     //Crear peticion
     public PeticionFlujoResponseDTO save(
-            PeticionFlujoCreateDTO createDTO, Usuario remitente,
+            PeticionFlujoCreateDTO createDTO,
+            Usuario remitente,
             Usuario destinatario,
             TipoPeticionFlujoEntity tipoPeticion,
             EstadoPeticionFlujoEntity estado,
@@ -51,6 +52,10 @@ public class PeticionFlujoDAO {
                 .map(PeticionFlujoMapper::toDTO);
     }
 
+    public Optional<PeticionFlujoEntity> findEntityById(Long id) {
+        return peticionRepository.findById(id);
+    }
+
     //Buscar todas las peticiones
     public List<PeticionFlujoResponseDTO> findAll() {
 
@@ -64,7 +69,6 @@ public class PeticionFlujoDAO {
             PeticionFlujoUpdateDTO updateDTO,
             Usuario destinatario,
             TipoPeticionFlujoEntity tipoPeticion,
-            EstadoPeticionFlujoEntity estado,
             LocalDate fechaFin) {
 
         return peticionRepository.findById(id)
@@ -74,7 +78,6 @@ public class PeticionFlujoDAO {
                             updateDTO,
                             destinatario,
                             tipoPeticion,
-                            estado,
                             fechaFin,
                             existingEntity //-> Entidad encontrada que será actualizada
                     );
@@ -97,11 +100,30 @@ public class PeticionFlujoDAO {
         return false;
     }
 
-    //Buscar peticiones pero el id del remitente
+    //Buscar peticiones por el id del remitente
     public List<PeticionFlujoResponseDTO> findByRemitenteId(Long id) {
 
         List<PeticionFlujoEntity> entities = peticionRepository.findByRemitenteIdUsuario(id);
         return PeticionFlujoMapper.toDTOList(entities);
+    }
+
+    //Buscar peticiones por el id del destinatario
+    public List<PeticionFlujoResponseDTO> findByDestinatarioId(Long id) {
+
+        List<PeticionFlujoEntity> entities = peticionRepository.findByDestinatarioIdUsuario(id);
+        return PeticionFlujoMapper.toDTOList(entities);
+    }
+
+    //Verifica si el nombre de la peticion ya existe
+    public boolean existsByNombreIgnoreCase(String nombre) {
+        return peticionRepository.existsByNombreIgnoreCase(nombre);
+    }
+
+    //Buscar peticion por nombre
+    public Optional<PeticionFlujoResponseDTO> findByNombre(String nombre) {
+
+        return peticionRepository.findByNombre(nombre)
+                .map(PeticionFlujoMapper::toDTO);
     }
 
 }

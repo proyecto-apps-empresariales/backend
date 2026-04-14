@@ -15,7 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RequerimientoPeticionDAO {
 
-    private IRequerimientoPeticionRepository requerimientoRepository;
+    private final IRequerimientoPeticionRepository requerimientoRepository;
 
     //Guardar requerimiento/peticion
     public RequerimientoPeticionResponseDTO save(RequerimientoPeticionCreateUpdateDTO createDTO) {
@@ -33,7 +33,14 @@ public class RequerimientoPeticionDAO {
                 .map(RequerimientoPeticionMapper::toDTO);
     }
 
-    //Buscar todos los requerimientos por id
+    //Buscar requerimiento por Nombre
+    public Optional<RequerimientoPeticionResponseDTO> findByNombre(String nombre) {
+
+        return requerimientoRepository.findByNombre(nombre)
+                .map(RequerimientoPeticionMapper::toDTO);
+    }
+
+    //Buscar todos los requerimientos
     public List<RequerimientoPeticionResponseDTO> findAll() {
 
         List<RequerimientoPeticionEntity> entities = requerimientoRepository.findAll();
@@ -65,4 +72,13 @@ public class RequerimientoPeticionDAO {
         }
         return false;
     }
+
+    public boolean existsByNombreIgnoreCase(String nombre) {
+        return requerimientoRepository.existsByNombreIgnoreCase(nombre);
+    }
+
+    public List<RequerimientoPeticionEntity> findByNombreIn(List<String> nombres) {
+        return requerimientoRepository.findByNombreIn(nombres);
+    }
+
 }

@@ -10,7 +10,9 @@ public interface IHistorialPeticionFlujoRepository extends JpaRepository<Histori
 
     List<HistorialPeticionFlujoEntity> findAllByPeticionId(Long id);
 
-    List<HistorialPeticionFlujoEntity> findAllByPeticionIdOrderByFecha(Long procesoId);
+    List<HistorialPeticionFlujoEntity> findAllByPeticionIdOrderByFecha(Long peticionID);
+
+    List<HistorialPeticionFlujoEntity> findAllByPeticionNombreOrderByFecha(String peticionNombre);
 
 }
 

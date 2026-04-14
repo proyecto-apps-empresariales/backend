@@ -1,6 +1,7 @@
 package com.proyecto_backend.demoAPI.exceptions;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,117 +12,127 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // ===============================
-    // VALIDACIONES @Valid (400)
-    // ===============================
+    // =====================================================
+    // 🔴 VALIDACIONES DTO (@Valid) -> 400
+    // =====================================================
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
+    public ResponseEntity<ApiError> handleValidationExceptions(MethodArgumentNotValidException ex) {
 
         Map<String, String> errors = new HashMap<>();
 
-        // Recorre todos los errores de los campos del DTO
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage())
         );
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", HttpStatus.BAD_REQUEST.value());
-        response.put("error", "Error de validación");
-        response.put("timestamp", new Date());
-        response.put("errors", errors);
+        ApiError apiError = new ApiError(
+                HttpStatus.BAD_REQUEST.value(),
+                "Error de validación",
+                new Date(),
+                errors
+        );
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
     }
 
-    // ===============================
-    // ERROR 404 - RECURSO NO ENCONTRADO
-    // ===============================
+    // =====================================================
+    // 🔴 404 - RESOURCE NOT FOUND
+    // =====================================================
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleResourceNotFound(
-            ResourceNotFoundException ex) {
+    public ResponseEntity<ApiError> handleResourceNotFound(ResourceNotFoundException ex) {
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", HttpStatus.NOT_FOUND.value());
-        response.put("error", ex.getMessage());
-        response.put("timestamp", ex.getTimestamp());
+        ApiError apiError = new ApiError(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                ex.getTimestamp(),
+                null
+        );
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
     }
 
-    // ===============================
-    // ERROR 400 - BAD REQUEST NEGOCIO
-    // ===============================
+    // =====================================================
+    // 🔴 400 - BAD REQUEST NEGOCIO
+    // =====================================================
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<Map<String, Object>> handleBadRequest(
-            BadRequestException ex) {
+    public ResponseEntity<ApiError> handleBadRequest(BadRequestException ex) {
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", HttpStatus.BAD_REQUEST.value());
-        response.put("error", ex.getMessage());
-        response.put("timestamp", ex.getTimestamp());
+        ApiError apiError = new ApiError(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                ex.getTimestamp(),
+                null
+        );
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
     }
 
-    // ===============================
-    // ERROR 409 - CONFLICTO
-    // ===============================
+    // =====================================================
+    // 🔴 409 - CONFLICT (Duplicados, reglas de negocio)
+    // =====================================================
     @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<Map<String, Object>> handleConflict(ConflictException ex) {
+    public ResponseEntity<ApiError> handleConflict(ConflictException ex) {
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", HttpStatus.CONFLICT.value());
-        response.put("error", ex.getMessage());
-        response.put("timestamp", ex.getTimestamp());
+        ApiError apiError = new ApiError(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage(),
+                ex.getTimestamp(),
+                null
+        );
 
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(apiError);
     }
 
-    // ===============================
-    // ERROR 401 - NO AUTENTICADO -> FALTA INICIAR SESIÓN
-    // ===============================
+    // =====================================================
+    // 🔴 401 - NO AUTENTICADO
+    // =====================================================
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<Map<String, Object>> handleUnauthorized(UnauthorizedException ex) {
+    public ResponseEntity<ApiError> handleUnauthorized(UnauthorizedException ex) {
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", HttpStatus.CONFLICT.value());
-        response.put("error", ex.getMessage());
-        response.put("timestamp", ex.getTimestamp());
+        ApiError apiError = new ApiError(
+                HttpStatus.UNAUTHORIZED.value(),
+                ex.getMessage(),
+                ex.getTimestamp(),
+                null
+        );
 
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiError);
     }
 
-    // ===============================
-    // ERROR 403 - NO AUTORIZADO -> FALTAN PERMISOS
-    // ===============================
+    // =====================================================
+    // 🔴 403 - NO AUTORIZADO
+    // =====================================================
     @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<Map<String, Object>> handleForbidden(ForbiddenException ex) {
+    public ResponseEntity<ApiError> handleForbidden(ForbiddenException ex) {
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", HttpStatus.CONFLICT.value());
-        response.put("error", ex.getMessage());
-        response.put("timestamp", ex.getTimestamp());
+        ApiError apiError = new ApiError(
+                HttpStatus.FORBIDDEN.value(),
+                ex.getMessage(),
+                ex.getTimestamp(),
+                null
+        );
 
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(apiError);
     }
 
-    // ===============================
-    // ERROR 500 - CUALQUIER ERROR NO CONTROLADO
-    // ===============================
+    // =====================================================
+    // 🔴 500 - ERROR NO CONTROLADO
+    // =====================================================
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGeneralException(Exception ex) {
+    public ResponseEntity<ApiError> handleGeneralException(Exception ex) {
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        response.put("error", "Error interno del servidor");
-        response.put("timestamp", new Date());
+        log.error("Error interno no controlado", ex);
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        ApiError apiError = new ApiError(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Error interno del servidor",
+                new Date(),
+                null
+        );
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiError);
     }
-
-
 }
