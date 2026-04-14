@@ -24,7 +24,6 @@ public class TipoPeticionFlujoServiceImpl implements ITipoPeticionFlujoService {
 
     private final TipoPeticionFlujoDAO tipoPeticionDAO;
     private final IRequerimientoPeticionService requerimientoService;
-    private final TipoPeticionFlujoServiceImpl self;
 
     @Override
     @Transactional
@@ -104,7 +103,7 @@ public class TipoPeticionFlujoServiceImpl implements ITipoPeticionFlujoService {
         log.info("Actualizando TipoPetición: {}", updateDTO.getNombre());
 
         //Si se va actualizar el nombre, se verifica que no alla otro tipo con el mismo nombre
-        TipoPeticionFlujoResponseDTO existingEntity = self.getTipoPeticionFlujoById(id);
+        TipoPeticionFlujoResponseDTO existingEntity = this.getTipoPeticionFlujoById(id);
         if (!existingEntity.getNombre().equals(updateDTO.getNombre())) {
             validateNombreRequerimiento(updateDTO);
         }

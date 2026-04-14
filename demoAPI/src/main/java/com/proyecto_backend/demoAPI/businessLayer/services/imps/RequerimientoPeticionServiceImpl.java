@@ -22,7 +22,6 @@ import java.util.List;
 public class RequerimientoPeticionServiceImpl implements IRequerimientoPeticionService {
 
     private final RequerimientoPeticionDAO requerimientoDAO;
-    private final RequerimientoPeticionServiceImpl self;
 
     @Override
     @Transactional
@@ -96,7 +95,7 @@ public class RequerimientoPeticionServiceImpl implements IRequerimientoPeticionS
         validateUpdateData(updateDTO);
 
         //Si se va actualizar el nombre, se verifica que no alla otro tipo con el mismo nombre
-        RequerimientoPeticionResponseDTO existingEntity = self.getRequerimientoById(id);
+        RequerimientoPeticionResponseDTO existingEntity = this.getRequerimientoById(id);
         if (!existingEntity.getNombre().equals(updateDTO.getNombre())) {
             validateNombreRequerimiento(updateDTO);
         }
