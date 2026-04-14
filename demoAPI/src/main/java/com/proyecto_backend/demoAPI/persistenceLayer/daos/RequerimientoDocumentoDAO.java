@@ -64,6 +64,12 @@ public class RequerimientoDocumentoDAO {
                 .map(RequerimientoDocumentoMapper::toDTO);
     }
 
+    //Buscar el requerimiento entity de documento por nombre
+    public Optional<RequerimientoDocumentoEntity> findEntityByNombre(String nombre) {
+
+        return requerimientoDocumentoRepository.findByNombreIgnoreCase(nombre);
+    }
+
     //Verificar si el requerimiento de documento ya existe
     public boolean existsByNombreIgnoreCare(String nombre) {
         return requerimientoDocumentoRepository.existsByNombreIgnoreCase(nombre);

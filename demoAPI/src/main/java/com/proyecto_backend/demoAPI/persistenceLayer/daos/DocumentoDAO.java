@@ -29,6 +29,14 @@ public class DocumentoDAO {
         return DocumentoMapper.toDTO(savedEntity);
     }
 
+    //Guardar el documento, recibe entidad y guarda la entity, retorna el responseDTO
+    public DocumentoResponseDTO saveEntity(DocumentoEntity entity){
+
+        DocumentoEntity savedEntity= documentoRepository.save(entity);
+
+        return DocumentoMapper.toDTO(savedEntity);
+    }
+
     //Buscar documento por ID
     public Optional<DocumentoResponseDTO> findById(Long id) {
 
@@ -67,8 +75,14 @@ public class DocumentoDAO {
                 .map(DocumentoMapper::toDTO);
     }
 
+    //Buscar documento por nombre entidad
+    public Optional<DocumentoEntity> findByNombreEntity(String nombre) {
+
+        return documentoRepository.findByNombreIgnoreCase(nombre);
+    }
+
     //Verificar si el documento ya existe
-    public boolean existsByNombreIgnoreCare(String nombre) {
+    public boolean existsByNombreIgnoreCase(String nombre) {
         return documentoRepository.existsByNombreIgnoreCase(nombre);
     }
 }

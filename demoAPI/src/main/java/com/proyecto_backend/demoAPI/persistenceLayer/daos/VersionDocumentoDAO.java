@@ -26,6 +26,14 @@ public class VersionDocumentoDAO {
         return VersionDocumentoMapper.toDTO(savedEntity);
     }
 
+    //Guardar el documento, recibe entity y guarda la entity, retorna el responseDTO
+    public VersionDocumentoResponseDTO saveEntity(VersionDocumentoEntity entity){
+
+        VersionDocumentoEntity savedEntity= versionDocumentoRepository.save(entity);
+
+        return VersionDocumentoMapper.toDTO(savedEntity);
+    }
+
     //Buscar documento por ID
     public Optional<VersionDocumentoResponseDTO> findById(Long id) {
 
@@ -33,13 +41,20 @@ public class VersionDocumentoDAO {
                 .map(VersionDocumentoMapper::toDTO);
     }
 
-    //Obtener todos los documentos
+    //Obtener todos las versiones
     public List<VersionDocumentoResponseDTO> findAll() {
 
         List<VersionDocumentoEntity> entities = versionDocumentoRepository.findAll();
         return VersionDocumentoMapper.toDTOList(entities);
     }
 
+    // Obtener versiones de un documento por id del documento
+    public List<VersionDocumentoResponseDTO> findByDocumentoId(Long idDocumento) {
+        return versionDocumentoRepository.findByDocumento_IdOrderByIdAsc(idDocumento)
+                .stream()
+                .map(VersionDocumentoMapper::toDTO)
+                .toList();
+    }
 
     //Actualizar version documento existente por ID, recibe un updateDTO, genera la actualizacion desde el mapper, guarda el entity y retorna responseDTO
     public Optional<VersionDocumentoResponseDTO> update(Long id, VersionDocumentoUpdateDTO updateDTO) {
@@ -67,5 +82,10 @@ public class VersionDocumentoDAO {
     //Verificar si la version documento ya existe
     public boolean existsByNombreIgnoreCare(String nombre) {
         return versionDocumentoRepository.existsByNombreIgnoreCase(nombre);
+    }
+
+    // Contar versiones de un documento
+    public long countByDocumentoId(Long idDocumento) {
+        return versionDocumentoRepository.countByDocumento_Id(idDocumento);
     }
 }

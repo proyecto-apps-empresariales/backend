@@ -31,11 +31,25 @@ public class TipoDocumentoDAO {
         return TipoDocumentoMapper.toDTO(savedEntity);
     }
 
+    //Guardar tipo de documento, recibe entity y guarda la entity, retorna el responseDTO
+    public TipoDocumentoResponseDTO saveEntity(TipoDocumentoEntity entity){
+
+        TipoDocumentoEntity savedEntity= tipoDocumentoRepository.save(entity);
+
+        return TipoDocumentoMapper.toDTO(savedEntity);
+    }
+
     //Buscar tipo de documento por ID
     public Optional<TipoDocumentoResponseDTO> findById(Long id) {
 
         return tipoDocumentoRepository.findById(id)
                 .map(TipoDocumentoMapper::toDTO);
+    }
+
+    //Buscar tipo de documento entidad por ID
+    public Optional<TipoDocumentoEntity> findEntityById(Long id) {
+
+        return tipoDocumentoRepository.findById(id);
     }
 
     //Obtener todos los tipos de documento
@@ -45,22 +59,6 @@ public class TipoDocumentoDAO {
         return TipoDocumentoMapper.toDTOList(entities);
     }
 
-
-    //Actualizar tipo de documento existente por ID, recibe un updateDTO, genera la actualizacion desde el mapper, guarda el entity y retorna responseDTO
-    public Optional<TipoDocumentoResponseDTO> update(Long id, TipoDocumentoCreateUpdateDTO updateDTO) {
-
-        return tipoDocumentoRepository.findById(id)
-                .map(existingEntity -> {
-                    TipoDocumentoMapper.updateEntityFromDTO(
-                            updateDTO,
-                            existingEntity
-                    );
-
-                    TipoDocumentoEntity updatedEntity = tipoDocumentoRepository.save(existingEntity);
-                    return TipoDocumentoMapper.toDTO(updatedEntity);
-                });
-    }
-
     //Buscar tipo de documento por nombre
     public Optional<TipoDocumentoResponseDTO> findByNombre(String nombre) {
 
@@ -68,9 +66,25 @@ public class TipoDocumentoDAO {
                 .map(TipoDocumentoMapper::toDTO);
     }
 
+    //Buscar tipo de documento por nombre
+    public Optional<TipoDocumentoEntity> findByNombreEntidad(String nombre) {
+
+        return tipoDocumentoRepository.findByNombreIgnoreCase(nombre);
+    }
+
     //Verificar si el tipo de documento ya existe
-    public boolean existsByNombreIgnoreCare(String nombre) {
+    public boolean existsByNombreIgnoreCase(String nombre) {
         return tipoDocumentoRepository.existsByNombreIgnoreCase(nombre);
+    }
+
+    //Eliminar tipo de documento por ID
+    public boolean deleteById(Long id) {
+
+        if (tipoDocumentoRepository.existsById(id)) {
+            tipoDocumentoRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
 }

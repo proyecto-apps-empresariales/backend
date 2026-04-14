@@ -33,7 +33,6 @@ public class VersionDocumentoMapper {
         if (dto == null) return null;
 
         VersionDocumentoEntity entity = new VersionDocumentoEntity();
-        entity.setNombre(dto.getNombre());
         entity.setDescripcion(dto.getDescripcion());
         return entity;
     }
@@ -46,7 +45,6 @@ public class VersionDocumentoMapper {
             return;
         }
 
-        if (dto.getNombre() != null) entity.setNombre(dto.getNombre());
         if (dto.getDescripcion() != null) entity.setDescripcion(dto.getDescripcion());
     }
 

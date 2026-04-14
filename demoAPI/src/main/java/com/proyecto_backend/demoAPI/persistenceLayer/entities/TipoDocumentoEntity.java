@@ -25,5 +25,11 @@ public class TipoDocumentoEntity {
     @Column(nullable = false)
     private String descripcion;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "tipo_documento_requerimiento",
+            joinColumns = @JoinColumn(name = "id_tipo_documento"),
+            inverseJoinColumns = @JoinColumn(name = "id_requerimiento")
+    )
     private List<RequerimientoDocumentoEntity> requerimientos;
 }

@@ -5,6 +5,8 @@ import com.proyecto_backend.demoAPI.businessLayer.dtos.EstadoPeticionFlujoRespon
 import com.proyecto_backend.demoAPI.businessLayer.dtos.TipoDocumentoCreateUpdateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.TipoDocumentoResponseDTO;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.EstadoPeticionFlujoEntity;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.RequerimientoDocumentoEntity;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.RequerimientoPeticionEntity;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.TipoDocumentoEntity;
 
 import java.util.List;
@@ -24,6 +26,14 @@ public final class TipoDocumentoMapper {
         dto.setId(entity.getId());
         dto.setNombre(entity.getNombre());
         dto.setDescripcion(entity.getDescripcion());
+        if(entity.getRequerimientos()!=null){
+            dto.setRequerimientos(
+                    entity.getRequerimientos()
+                            .stream()
+                            .map(RequerimientoDocumentoMapper::toDTO)
+                            .toList()
+            );
+        }
 
         return dto;
     }

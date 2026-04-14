@@ -27,6 +27,14 @@ public class PlantillaDocumentoDAO {
         return PlantillaDocumentoMapper.toDTO(savedEntity);
     }
 
+    //Guardar plantilla de documento, recibe entity y guarda la entity, retorna el responseDTO
+    public PlantillaDocumentoResponseDTO save(PlantillaDocumentoEntity entity){
+
+        PlantillaDocumentoEntity savedEntity= plantillaDocumentoRepository.save(entity);
+
+        return PlantillaDocumentoMapper.toDTO(savedEntity);
+    }
+
     //Buscar plantilla de documento por ID
     public Optional<PlantillaDocumentoResponseDTO> findById(Long id) {
 
@@ -34,27 +42,17 @@ public class PlantillaDocumentoDAO {
                 .map(PlantillaDocumentoMapper::toDTO);
     }
 
+    //Buscar plantilla entidad de documento por ID
+    public Optional<PlantillaDocumentoEntity> findEntityById(Long id) {
+
+        return plantillaDocumentoRepository.findById(id);
+    }
+
     //Obtener todos las plantillas de documento
     public List<PlantillaDocumentoResponseDTO> findAll() {
 
         List<PlantillaDocumentoEntity> entities = plantillaDocumentoRepository.findAll();
         return PlantillaDocumentoMapper.toDTOList(entities);
-    }
-
-
-    //Actualizar plantilla de documento existente por ID, recibe un updateDTO, genera la actualizacion desde el mapper, guarda el entity y retorna responseDTO
-    public Optional<PlantillaDocumentoResponseDTO> update(Long id, PlantillaDocumentoCreateUpdateDTO updateDTO) {
-
-        return plantillaDocumentoRepository.findById(id)
-                .map(existingEntity -> {
-                    PlantillaDocumentoMapper.updateEntityFromDTO(
-                            updateDTO,
-                            existingEntity
-                    );
-
-                    PlantillaDocumentoEntity updatedEntity = plantillaDocumentoRepository.save(existingEntity);
-                    return PlantillaDocumentoMapper.toDTO(updatedEntity);
-                });
     }
 
     //Buscar plantilla de documento por nombre

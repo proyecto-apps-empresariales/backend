@@ -32,9 +32,8 @@ public class PlantillaDocumentoMapper {
 
         PlantillaDocumentoEntity entity = new PlantillaDocumentoEntity();
 
-        dto.setArchivoUrl(entity.getArchivoUrl());
-        dto.setTipoDocumento(entity.getTipoDocumento().getNombre());
-        dto.setDescripcion(entity.getDescripcion());
+        entity.setArchivoUrl(dto.getArchivoUrl());
+        entity.setDescripcion(dto.getDescripcion());
 
         return entity;
     }
