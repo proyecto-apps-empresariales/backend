@@ -31,7 +31,6 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
     private final PeticionFlujoDAO peticionDAO;
     private final IUsuarioService usuarioService;
     private final IEstadoPeticionFlujoService estadoService;
-    private final PeticionFlujoServiceImpl self;
 
     @Override
     @Transactional
@@ -149,7 +148,7 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
         validateUpdateData(updateDTO);
 
         //Si se va actualizar el nombre, se verifica que no alla otro tipo con el mismo nombre
-        PeticionFlujoResponseDTO existingEntity = self.getPeticionById(id);
+        PeticionFlujoResponseDTO existingEntity = this.getPeticionById(id);
         if (!existingEntity.getNombre().equals(updateDTO.getNombre())) {
             validateNombrePeticionUpdate(updateDTO);
         }

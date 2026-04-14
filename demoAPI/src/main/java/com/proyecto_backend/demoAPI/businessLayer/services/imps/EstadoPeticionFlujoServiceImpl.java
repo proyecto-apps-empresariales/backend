@@ -23,7 +23,6 @@ import java.util.List;
 public class EstadoPeticionFlujoServiceImpl implements IEstadoPeticionFlujoService {
 
     private final EstadoPeticionFlujoDAO estadoDAO;
-    private final EstadoPeticionFlujoServiceImpl self;
 
     //Guardar Estado
     @Override
@@ -110,7 +109,7 @@ public class EstadoPeticionFlujoServiceImpl implements IEstadoPeticionFlujoServi
         normalizeNombre(updateDTO);
 
         //Si se va actualizar el nombre, se verifica que no alla otro tipo con el mismo nombre
-        EstadoPeticionFlujoResponseDTO existingEntity = self.getEstadoById(id);
+        EstadoPeticionFlujoResponseDTO existingEntity = this.getEstadoById(id);
         if (!existingEntity.getNombre().equals(updateDTO.getNombre())) {
             validateDuplicatedName(updateDTO);
         }
