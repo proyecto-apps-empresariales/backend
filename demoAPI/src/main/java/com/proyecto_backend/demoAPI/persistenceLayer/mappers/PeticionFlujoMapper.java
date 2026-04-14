@@ -71,7 +71,6 @@ public final class PeticionFlujoMapper {
     public static void updateEntityFromDto(PeticionFlujoUpdateDTO dto,
                                            Usuario destinatario,
                                            TipoPeticionFlujoEntity tipoPeticion,
-                                           EstadoPeticionFlujoEntity estado,
                                            LocalDate fechaFin,
                                            PeticionFlujoEntity entity) {
 
@@ -79,7 +78,6 @@ public final class PeticionFlujoMapper {
 
         if (destinatario != null) entity.setDestinatario(destinatario);
         if (tipoPeticion != null) entity.setTipoPeticion(tipoPeticion);
-        if (estado != null) entity.setEstado(estado);
         if (fechaFin != null) entity.setFechaFin(fechaFin);
 
         if (dto.getDescripcion() != null) entity.setDescripcion(dto.getDescripcion());

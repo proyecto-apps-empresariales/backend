@@ -6,6 +6,7 @@ import com.proyecto_backend.demoAPI.businessLayer.dtos.UsuarioCreateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.UsuarioDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.UsuarioUpdateContrasenaDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.UsuarioUpdateDTO;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.Usuario;
 
 public interface IUsuarioService {
 
@@ -35,6 +36,9 @@ public interface IUsuarioService {
 
     // Metodo para eliminar un usuario:
     void eliminarUsuario(Long idUsuario);
+
+    //Busca por ID y Resuelve la entidad
+    public Usuario buscarUsuarioEntityById(Long idUsuario);
 
 }
 

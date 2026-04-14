@@ -16,7 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TipoPeticionFlujoDAO {
 
-    private ITipoPeticionFlujoRepository tipoPeticionRepository;
+    private final ITipoPeticionFlujoRepository tipoPeticionRepository;
 
     //Crear un tipo de petición
     public TipoPeticionFlujoResponseDTO save(
@@ -34,6 +34,13 @@ public class TipoPeticionFlujoDAO {
     public Optional<TipoPeticionFlujoResponseDTO> findById(Long id) {
 
         return tipoPeticionRepository.findById(id)
+                .map(TipoPeticionFlujoMapper::toDTO);
+    }
+
+    //Buscar tipo de petición por Nombre
+    public Optional<TipoPeticionFlujoResponseDTO> findByNombre(String nombre) {
+
+        return tipoPeticionRepository.findByNombre(nombre)
                 .map(TipoPeticionFlujoMapper::toDTO);
     }
 
@@ -71,5 +78,9 @@ public class TipoPeticionFlujoDAO {
             return true;
         }
         return false;
+    }
+
+    public boolean existsByNombreIgnoreCase(String nombre) {
+        return tipoPeticionRepository.existsByNombreIgnoreCase(nombre);
     }
 }

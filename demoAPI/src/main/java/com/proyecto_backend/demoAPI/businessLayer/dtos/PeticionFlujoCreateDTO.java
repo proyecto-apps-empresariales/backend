@@ -16,6 +16,11 @@ import java.time.LocalDate;
 @Schema(description = "Dto para crear PeticionFlujoEntity")
 public class PeticionFlujoCreateDTO {
 
+    //Se debe validar con jwt authentication. No se envia en dto
+    @Schema(description = "Id del usuario remitente", example = "5")
+    @NotNull(message = "EL id del remitente no puede ser nulo")
+    private Long remitente;
+
     @Schema(description = "Id del usuario destinatario", example = "5")
     @NotNull(message = "EL id del destinatario no puede ser nulo")
     private Long destinatario;

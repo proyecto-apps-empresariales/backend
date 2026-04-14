@@ -124,7 +124,7 @@ public class UsuarioServiceImp implements IUsuarioService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datos no validos");
         }
 
-        buscarUsuarioId(id);
+        buscarUsuarioEntityById(id);
 
         Organizacion organizacion = dto.getIdOrganizacion() != null ? buscarOrganizacion(dto.getIdOrganizacion())
                 : null;
@@ -139,7 +139,7 @@ public class UsuarioServiceImp implements IUsuarioService {
     @Override
     public UsuarioDTO actualizarContrasena (UsuarioUpdateContrasenaDTO dto) {
 
-        Usuario usuario = buscarUsuarioId(dto.getIdUsuario());
+        Usuario usuario = buscarUsuarioEntityById(dto.getIdUsuario());
 
         validarContrasenas(dto);
 
@@ -193,7 +193,8 @@ public class UsuarioServiceImp implements IUsuarioService {
     }
 
     // Metodo privado para buscar un usuario por ID:
-    private Usuario buscarUsuarioId(Long idUsuario) {
+    @Override
+    public Usuario buscarUsuarioEntityById(Long idUsuario) {
 
         if (idUsuario == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID no valido");
