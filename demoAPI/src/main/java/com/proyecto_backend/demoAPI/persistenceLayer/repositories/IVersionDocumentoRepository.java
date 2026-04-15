@@ -16,7 +16,7 @@ public interface IVersionDocumentoRepository extends JpaRepository<VersionDocume
     Boolean existsByNombreIgnoreCase(String nombre);
 
     //Buscar por documento
-    Optional<VersionDocumentoEntity> findByDocumento_IdOrderByIdAsc(Long idDocumento);
+    List<VersionDocumentoEntity> findByDocumento_IdOrderByIdAsc(Long idDocumento);
 
     //Contar versiones
     long countByDocumento_Id(Long idDocumento);

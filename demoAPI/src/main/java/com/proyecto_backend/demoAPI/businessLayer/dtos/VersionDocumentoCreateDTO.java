@@ -21,8 +21,8 @@ public class VersionDocumentoCreateDTO {
     @NotBlank(message = "El nombre del documento no puede estar vacio")
     private String documento;
 
-    @Schema(description = "Nombre del usuario actualizador del documento", example = "Juan", accessMode = Schema.AccessMode.READ_ONLY)
-    @NotBlank(message = "El nombre del usuario no puede estar vacio")
+    @Schema(description = "Correo del usuario actualizador del documento", example = "Juan", accessMode = Schema.AccessMode.READ_ONLY)
+    @NotBlank(message = "El correo del usuario no puede estar vacio")
     private String usuarioActualizador;
 
     @Schema(description = "Url de la version del documento en la nube", example = "https://storage.salud.gov.co/documentos/expedientes/12345/versiones/1.0/documento.pdf")

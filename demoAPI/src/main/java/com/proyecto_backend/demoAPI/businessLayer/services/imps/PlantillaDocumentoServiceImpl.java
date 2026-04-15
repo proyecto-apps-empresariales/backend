@@ -2,6 +2,7 @@ package com.proyecto_backend.demoAPI.businessLayer.services.imps;
 
 import com.proyecto_backend.demoAPI.businessLayer.dtos.PlantillaDocumentoCreateUpdateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.PlantillaDocumentoResponseDTO;
+import com.proyecto_backend.demoAPI.businessLayer.services.IPlantillaDocumentoService;
 import com.proyecto_backend.demoAPI.exceptions.BadRequestException;
 import com.proyecto_backend.demoAPI.exceptions.ResourceNotFoundException;
 import com.proyecto_backend.demoAPI.persistenceLayer.daos.PlantillaDocumentoDAO;
@@ -16,11 +17,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PlantillaDocumentoServiceImpl {
+public class PlantillaDocumentoServiceImpl implements IPlantillaDocumentoService {
 
     public final PlantillaDocumentoDAO plantillaDocumentoDAO;
     public final TipoDocumentoDAO tipoDocumentoDAO;
 
+    @Override
     @Transactional
     public PlantillaDocumentoResponseDTO createPlantilla(PlantillaDocumentoCreateUpdateDTO dto){
 
@@ -49,6 +51,7 @@ public class PlantillaDocumentoServiceImpl {
         return plantillaDocumentoDAO.save(plantilla);
     }
 
+    @Override
     @Transactional
     public PlantillaDocumentoResponseDTO updatePlantilla(Long id, PlantillaDocumentoCreateUpdateDTO dto){
 
@@ -82,11 +85,13 @@ public class PlantillaDocumentoServiceImpl {
         return plantillaDocumentoDAO.save(plantilla);
     }
 
+    @Override
     public PlantillaDocumentoResponseDTO getPlantillaById(Long id){
         return plantillaDocumentoDAO.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("La plantilla no se encontro"));
     }
 
+    @Override
     public List<PlantillaDocumentoResponseDTO> getAllPlantillas(){
         return plantillaDocumentoDAO.findAll();
     }

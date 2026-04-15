@@ -55,16 +55,4 @@ public class PlantillaDocumentoDAO {
         return PlantillaDocumentoMapper.toDTOList(entities);
     }
 
-    //Buscar plantilla de documento por nombre
-    public Optional<PlantillaDocumentoResponseDTO> findByNombre(String nombre) {
-
-        return plantillaDocumentoRepository.findByNombreIgnoreCase(nombre)
-                .map(PlantillaDocumentoMapper::toDTO);
-    }
-
-    //Verificar si la plantilla de documento ya existe
-    public boolean existsByNombreIgnoreCare(String nombre) {
-        return plantillaDocumentoRepository.existsByNombreIgnoreCase(nombre);
-    }
-
 }

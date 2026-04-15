@@ -95,4 +95,23 @@ public class VersionDocumentoServiceImpl implements IVersionDocumentoService {
         return versionDocumentoDAO.update(id, dto)
                 .orElseThrow(() -> new ResourceNotFoundException("Versión no encontrada con id: " + id));
     }
+
+    //Borrar version
+    @Override
+    @Transactional
+    public void deleteVersion(Long id) {
+
+        if (id == null) {
+            throw new BadRequestException("El Id es obligatorio");
+        }
+
+        // El DAO intenta eliminar
+        boolean deleted = versionDocumentoDAO.deleteById(id);
+
+        // 404 → no existía
+        if (!deleted) {
+            throw new ResourceNotFoundException("Estado no encontrado con ID: " + id);
+        }
+
+    }
 }

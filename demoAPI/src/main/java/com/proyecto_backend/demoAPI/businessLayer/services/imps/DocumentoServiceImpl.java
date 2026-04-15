@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -56,17 +57,43 @@ public class DocumentoServiceImpl implements IDocumentoService{
 
     //Obtener todos los documentos
     @Override
-    @Transactional
     public List<DocumentoResponseDTO> getAllDocumento(){
         return documentoDAO.findAll();
     }
 
     //Obtener documento por ID
     @Override
-    @Transactional
     public DocumentoResponseDTO getDocumentoById(Long id){
         return documentoDAO.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Documento no encontrado con id: " + id));
+    }
+
+    //Obtener documento por nombre
+    public DocumentoResponseDTO getDocumentoByNombre(String nombre){
+        return documentoDAO.findByNombre(nombre)
+                .orElseThrow(() -> new ResourceNotFoundException("El documento con nombre: "+ nombre+" no existe"));
+    }
+
+    //Obtener todos los documentos creados por un usuario
+    public List<DocumentoResponseDTO> getAllDocumentoByUsuarioCreador(String usuario){
+        Usuario usuarioCreador= usuarioDAO.buscarUsuarioEntidadPorCorreo(usuario)
+                .orElseThrow(() -> new ResourceNotFoundException("El usuario con correo:"+usuario+ "no existe"));
+
+        return documentoDAO.findByUsuarioCreador(usuarioCreador.getIdUsuario());
+    }
+
+    //Obtener todos los documentos segun tipo de documento
+    public List<DocumentoResponseDTO> getAllDocumentoByTipoDocumento(String tipoDocumento){
+        TipoDocumentoEntity tipoDocumentoEntidad= tipoDocumentoDAO.findByNombreEntidad(tipoDocumento)
+                .orElseThrow(() -> new ResourceNotFoundException("El tipo de documento:"+tipoDocumento+ "no existe"));
+
+        return documentoDAO.findByTipoDocumento(tipoDocumentoEntidad.getId());
+    }
+
+    @Override
+    //Obtener todos los documentos segun fecha de creacion
+    public List<DocumentoResponseDTO> getAllDocumentoByFechaCreacion(LocalDate inicio, LocalDate fin){
+        return documentoDAO.findByFechaCreacion(inicio,fin);
     }
 
     //Editar documento
@@ -75,10 +102,9 @@ public class DocumentoServiceImpl implements IDocumentoService{
     public DocumentoResponseDTO updateDocumento(Long id, DocumentoUpdateDTO dto) {
 
         // Verificar que el documento existe
-        if (!documentoDAO.existsByNombreIgnoreCase(dto.getNombre())) {
-            throw new ResourceNotFoundException("El documento a editar no existe");
+        if (documentoDAO.findById(id).isEmpty()) {
+            throw new ResourceNotFoundException("Documento no encontrado con id: " + id);
         }
-
         //Validar que nombre y descripción no estén vacíos
         if (dto.getNombre() == null || dto.getNombre().isBlank()) {
             throw new BadRequestException("El nombre del documento no puede estar vacío");

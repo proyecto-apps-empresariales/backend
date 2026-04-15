@@ -19,13 +19,13 @@ public class DocumentoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_documento")
-    private long id;
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_usuario_creador", nullable = false)
     private Usuario usuarioCreador;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_tipo_documento", nullable = false)
     private TipoDocumentoEntity tipoDocumento;
 

@@ -9,6 +9,7 @@ import com.proyecto_backend.demoAPI.persistenceLayer.entities.RequerimientoDocum
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.RequerimientoPeticionEntity;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.TipoDocumentoEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public final class TipoDocumentoMapper {
@@ -33,6 +34,8 @@ public final class TipoDocumentoMapper {
                             .map(RequerimientoDocumentoMapper::toDTO)
                             .toList()
             );
+        }else {
+            dto.setRequerimientos(new ArrayList<>());
         }
 
         return dto;
@@ -64,9 +67,7 @@ public final class TipoDocumentoMapper {
 
     //Convertir lista de entidades a listaDto
     public static List<TipoDocumentoResponseDTO> toDTOList(List<TipoDocumentoEntity> list) {
-
-        if (list == null) return List.of();
-
-        return list.stream().map(TipoDocumentoMapper::toDTO).toList();
+        if (list == null) return new ArrayList<>();
+        return new ArrayList<>(list.stream().map(TipoDocumentoMapper::toDTO).toList());
     }
 }

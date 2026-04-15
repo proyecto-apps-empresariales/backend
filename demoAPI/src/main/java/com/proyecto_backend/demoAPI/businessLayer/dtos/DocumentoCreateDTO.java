@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 @Schema(description = "DTO para crear documentos")
 public class DocumentoCreateDTO {
 
-    @Schema(description = "Correo del usuario creador del documento", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
+    @Schema(description = "Correo del usuario creador del documento", example = "camila@correo.com", accessMode = Schema.AccessMode.READ_ONLY)
     @NotBlank(message = "El correo del usario creador no puede estar vacio")
     private String usuarioCreador;
 
-    @Schema(description = "Nombre del tipo de documento que usa el documento", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
+    @Schema(description = "Nombre del tipo de documento que usa el documento", example = "Solicitud informe semanal", accessMode = Schema.AccessMode.READ_ONLY)
     @NotBlank(message = "El nombre del tipo de documento no puede estar vacio")
     private String tipoDocumento;
 

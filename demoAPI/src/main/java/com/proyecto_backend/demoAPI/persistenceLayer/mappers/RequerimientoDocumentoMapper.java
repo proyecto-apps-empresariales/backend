@@ -4,6 +4,7 @@ import com.proyecto_backend.demoAPI.businessLayer.dtos.RequerimientoDocumentoCre
 import com.proyecto_backend.demoAPI.businessLayer.dtos.RequerimientoDocumentoResponseDTO;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.RequerimientoDocumentoEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RequerimientoDocumentoMapper {
@@ -51,9 +52,7 @@ public class RequerimientoDocumentoMapper {
 
     //Convertir lista de entidades a listaDto
     public static List<RequerimientoDocumentoResponseDTO> toDTOList(List<RequerimientoDocumentoEntity> list) {
-
-        if (list == null) return List.of();
-
-        return list.stream().map(RequerimientoDocumentoMapper::toDTO).toList();
+        if (list == null) return new ArrayList<>();
+        return new ArrayList<>(list.stream().map(RequerimientoDocumentoMapper::toDTO).toList());
     }
 }

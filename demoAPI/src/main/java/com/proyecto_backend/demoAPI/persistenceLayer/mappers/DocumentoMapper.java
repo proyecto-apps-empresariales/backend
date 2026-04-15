@@ -28,6 +28,14 @@ public final class DocumentoMapper {
         dto.setDescripcion(entity.getDescripcion());
         dto.setFechaCreacion(entity.getFechaCreacion());
 
+        dto.setVersiones(
+                entity.getVersiones() != null
+                        ? entity.getVersiones().stream()
+                        .map(VersionDocumentoMapper::toDTO)
+                        .toList()
+                        : List.of()
+        );
+
         return dto;
     }
 

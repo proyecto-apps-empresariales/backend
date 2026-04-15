@@ -9,12 +9,6 @@ import java.util.Optional;
 
 public interface IPlantillaDocumentoRepository extends JpaRepository<PlantillaDocumentoEntity, Long> {
 
-    //Metodo para buscar por nombre
-    Optional<PlantillaDocumentoEntity> findByNombreIgnoreCase(String nombre);
-
-    //Existe por nombre
-    Boolean existsByNombreIgnoreCase(String nombre);
-
     // Buscar por tipo de documento (nombre del tipo)
     Optional<PlantillaDocumentoEntity> findByTipoDocumento_NombreIgnoreCase(String nombreTipo);
 

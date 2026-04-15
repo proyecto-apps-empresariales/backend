@@ -24,6 +24,7 @@ public class VersionDocumentoMapper {
         dto.setNombre(entity.getNombre());
         dto.setDescripcion(entity.getDescripcion());
         dto.setFechaActualizacion(entity.getFechaActualizacion());
+        dto.setArchivoUrl(entity.getArchivoUrl());
 
         return dto;
     }

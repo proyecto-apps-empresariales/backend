@@ -15,4 +15,6 @@ public interface IVersionDocumentoService {
     public VersionDocumentoResponseDTO getVersionById(Long id);
 
     public List<VersionDocumentoResponseDTO> getVersionesByDocumento(Long idDocumento);
+
+    public void deleteVersion(Long id);
 }

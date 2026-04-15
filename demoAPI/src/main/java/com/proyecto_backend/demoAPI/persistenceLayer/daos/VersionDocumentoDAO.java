@@ -88,4 +88,14 @@ public class VersionDocumentoDAO {
     public long countByDocumentoId(Long idDocumento) {
         return versionDocumentoRepository.countByDocumento_Id(idDocumento);
     }
+
+    //Eliminar version por ID
+    public boolean deleteById(Long id) {
+
+        if (versionDocumentoRepository.existsById(id)) {
+            versionDocumentoRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 }

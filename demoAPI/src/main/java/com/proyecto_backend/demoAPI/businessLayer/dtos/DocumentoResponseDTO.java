@@ -9,6 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -50,4 +52,8 @@ public class DocumentoResponseDTO {
     @NotNull(message = "La fecha no puede estar vacía")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaCreacion;
+
+    @Schema(description = "Versiones del documento asociadas", example = "V2, V3")
+    @NotEmpty(message = "La lista no puede estar vacía")
+    private List<VersionDocumentoResponseDTO> versiones;
 }

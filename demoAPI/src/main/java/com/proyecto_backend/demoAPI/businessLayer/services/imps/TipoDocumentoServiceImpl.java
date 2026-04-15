@@ -63,10 +63,10 @@ public class TipoDocumentoServiceImpl implements ITipoDocumentoService {
 
     //Metodo para transformar los requerimientos de nombre a requerimientoDocumento entity
     private List<RequerimientoDocumentoEntity> resolverRequerimientos(List<String> nombres) {
-        return nombres.stream()
+        return new ArrayList<>(nombres.stream()
                 .map(nombre -> requerimientoDocumentoDAO.findEntityByNombre(nombre)
                         .orElseThrow(() -> new RuntimeException("Requerimiento no encontrado: " + nombre)))
-                .toList();
+                .toList());
     }
 
     @Override
@@ -85,7 +85,7 @@ public class TipoDocumentoServiceImpl implements ITipoDocumentoService {
     public TipoDocumentoResponseDTO updateTipoDocumento(Long id, TipoDocumentoCreateUpdateDTO dto){
 
         // Verificar que el tipo de documento existe
-        if (!tipoDocumentoDAO.existsByNombreIgnoreCase(dto.getNombre())) {
+        if (tipoDocumentoDAO.findById(id).isEmpty()) {
             throw new ResourceNotFoundException("El tipo de documento a editar no existe");
         }
 
