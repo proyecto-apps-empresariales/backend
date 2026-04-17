@@ -3,10 +3,7 @@ package com.proyecto_backend.demoAPI.persistenceLayer.daos;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.PeticionFlujoCreateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.PeticionFlujoResponseDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.PeticionFlujoUpdateDTO;
-import com.proyecto_backend.demoAPI.persistenceLayer.entities.EstadoPeticionFlujoEntity;
-import com.proyecto_backend.demoAPI.persistenceLayer.entities.PeticionFlujoEntity;
-import com.proyecto_backend.demoAPI.persistenceLayer.entities.TipoPeticionFlujoEntity;
-import com.proyecto_backend.demoAPI.persistenceLayer.entities.Usuario;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.*;
 import com.proyecto_backend.demoAPI.persistenceLayer.mappers.PeticionFlujoMapper;
 import com.proyecto_backend.demoAPI.persistenceLayer.repositories.IPeticionFlujoRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +24,7 @@ public class PeticionFlujoDAO {
             PeticionFlujoCreateDTO createDTO,
             Usuario remitente,
             Usuario destinatario,
+            DocumentoEntity documento,
             TipoPeticionFlujoEntity tipoPeticion,
             EstadoPeticionFlujoEntity estado,
             LocalDate fechaFin) {
@@ -35,6 +33,7 @@ public class PeticionFlujoDAO {
                 createDTO,
                 remitente,
                 destinatario,
+                documento,
                 tipoPeticion,
                 estado,
                 fechaFin
@@ -68,6 +67,7 @@ public class PeticionFlujoDAO {
             Long id,
             PeticionFlujoUpdateDTO updateDTO,
             Usuario destinatario,
+            DocumentoEntity documento,
             TipoPeticionFlujoEntity tipoPeticion,
             LocalDate fechaFin) {
 
@@ -77,6 +77,7 @@ public class PeticionFlujoDAO {
                     PeticionFlujoMapper.updateEntityFromDto(
                             updateDTO,
                             destinatario,
+                            documento,
                             tipoPeticion,
                             fechaFin,
                             existingEntity //-> Entidad encontrada que será actualizada
@@ -123,6 +124,12 @@ public class PeticionFlujoDAO {
     public Optional<PeticionFlujoResponseDTO> findByNombre(String nombre) {
         return peticionRepository.findByNombre(nombre)
                 .map(PeticionFlujoMapper::toDTO);
+    }
+
+    //REsuelve la entidad
+    public Optional<PeticionFlujoEntity> findPeticionEntityById (Long id) {
+
+        return peticionRepository.findById(id);
     }
 
     //Se usa para el update

@@ -3,18 +3,12 @@ package com.proyecto_backend.demoAPI.businessLayer.services.imps;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.PeticionFlujoCreateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.PeticionFlujoResponseDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.PeticionFlujoUpdateDTO;
-import com.proyecto_backend.demoAPI.businessLayer.services.IEstadoPeticionFlujoService;
-import com.proyecto_backend.demoAPI.businessLayer.services.IPeticionFlujoService;
-import com.proyecto_backend.demoAPI.businessLayer.services.ITipoPeticionFlujoService;
-import com.proyecto_backend.demoAPI.businessLayer.services.IUsuarioService;
+import com.proyecto_backend.demoAPI.businessLayer.services.*;
 import com.proyecto_backend.demoAPI.exceptions.BadRequestException;
 import com.proyecto_backend.demoAPI.exceptions.ConflictException;
 import com.proyecto_backend.demoAPI.exceptions.ResourceNotFoundException;
 import com.proyecto_backend.demoAPI.persistenceLayer.daos.PeticionFlujoDAO;
-import com.proyecto_backend.demoAPI.persistenceLayer.entities.EstadoPeticionFlujoEntity;
-import com.proyecto_backend.demoAPI.persistenceLayer.entities.PeticionFlujoEntity;
-import com.proyecto_backend.demoAPI.persistenceLayer.entities.TipoPeticionFlujoEntity;
-import com.proyecto_backend.demoAPI.persistenceLayer.entities.Usuario;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,6 +27,7 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
     private final IUsuarioService usuarioService;
     private final IEstadoPeticionFlujoService estadoService;
     private final ITipoPeticionFlujoService tipoPeticionService;
+    private final IDocumentoService documentoService;
 
     @Override
     @Transactional
@@ -49,6 +44,8 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
         Usuario remitente = usuarioService.buscarUsuarioEntityById(createDTO.getRemitente());
         Usuario destinatario = usuarioService.buscarUsuarioEntityById(createDTO.getDestinatario());
 
+        DocumentoEntity documento = documentoService.getDocumentoEntityById(createDTO.getDocumento());
+
         TipoPeticionFlujoEntity tipoPeticion = tipoPeticionService.getTipoPeticionEntityById(createDTO.getTipoPeticion());
 
         //Setea el estado 1 por defecto => Estado CREADO
@@ -58,7 +55,7 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
 
         log.info("Creando nueva Peticion: {}", createDTO.getNombre());
 
-        PeticionFlujoResponseDTO createdPeticion = peticionDAO.save(createDTO, remitente, destinatario, tipoPeticion, estadoPeticion, fechaFin);
+        PeticionFlujoResponseDTO createdPeticion = peticionDAO.save(createDTO, remitente, destinatario, documento, tipoPeticion, estadoPeticion, fechaFin);
         log.info("Peticion creada exitosamente con ID: {}", createdPeticion.getId());
 
         return createdPeticion;
@@ -155,6 +152,8 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
 
         Usuario destinatario = usuarioService.buscarUsuarioEntityById(updateDTO.getDestinatario());
 
+        DocumentoEntity documento = documentoService.getDocumentoEntityById(updateDTO.getDocumento());
+
         //TipoPeticionFlujoEntity tipoPeticion = ....
         //Los estados se van a manejar desde endpoints en el controller para evitar tablas y enums
         TipoPeticionFlujoEntity tipoPeticion = tipoPeticionService.getTipoPeticionEntityById(updateDTO.getTipoPeticion());
@@ -163,7 +162,7 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
 
         log.info("Actualizando Peticion: {}", updateDTO.getNombre());
 
-        PeticionFlujoResponseDTO updatedPeticion = peticionDAO.update(id, updateDTO, destinatario, tipoPeticion, fechaFin)
+        PeticionFlujoResponseDTO updatedPeticion = peticionDAO.update(id, updateDTO, destinatario, documento, tipoPeticion, fechaFin)
                 .orElseThrow(() -> {
                     log.warn("No se encontró la petición con Id: {}", id);
                     return new ResourceNotFoundException("No se encotró la petición con ID: " + id);
@@ -193,6 +192,12 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
         log.info("Petición eliminada correctamente ID: {}", id);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public PeticionFlujoEntity getPeticionEntityById(Long id) {
+        return peticionDAO.findEntityById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Petición no encontrada con id: " + id));
+    }
 
     //VAlida que el nombre de la peticion no este en uso
     private void validateNombrePeticion(PeticionFlujoCreateDTO createDTO) {
@@ -258,7 +263,7 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
         return peticionDAO.cambiarEstado(id, 2L, estadoAprobado)
                 .orElseThrow(() ->
                         new ConflictException(
-                                "La petición no existe o no está en estado EN_REVISION"
+                                "La petición no existe o no está en estado EN_REVISION."
                         )
                 );
     }
@@ -278,7 +283,7 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
         return peticionDAO.cambiarEstado(id, 2L, estadoRechazado)
                 .orElseThrow(() ->
                         new ConflictException(
-                                "La petición no existe o no está en estado EN_REVISION"
+                                "La petición no existe o no está en estado -> EN_REVISION"
                         )
                 );
     }

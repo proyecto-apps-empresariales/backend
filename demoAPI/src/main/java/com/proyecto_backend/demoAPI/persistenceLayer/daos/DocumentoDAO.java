@@ -1,13 +1,9 @@
 package com.proyecto_backend.demoAPI.persistenceLayer.daos;
 
 import com.proyecto_backend.demoAPI.businessLayer.dtos.*;
-import com.proyecto_backend.demoAPI.exceptions.ResourceNotFoundException;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.DocumentoEntity;
-import com.proyecto_backend.demoAPI.persistenceLayer.entities.TipoDocumentoEntity;
 import com.proyecto_backend.demoAPI.persistenceLayer.mappers.DocumentoMapper;
-import com.proyecto_backend.demoAPI.persistenceLayer.mappers.TipoDocumentoMapper;
 import com.proyecto_backend.demoAPI.persistenceLayer.repositories.IDocumentoRepository;
-import com.proyecto_backend.demoAPI.persistenceLayer.repositories.ITipoDocumentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -108,5 +104,11 @@ public class DocumentoDAO {
                 .stream()
                 .map(DocumentoMapper::toDTO)
                 .toList();
+    }
+
+    // Metodo para buscar un usuario por id y retornar la entidad (casos especiales):
+    public Optional<DocumentoEntity> findDocumentoEntityById(Long id) {
+
+        return documentoRepository.findById(id);
     }
 }

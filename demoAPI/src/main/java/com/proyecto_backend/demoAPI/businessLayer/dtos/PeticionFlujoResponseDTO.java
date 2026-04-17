@@ -30,8 +30,8 @@ public class PeticionFlujoResponseDTO {
     @NotBlank
     private String destinatario;
 
-//    @Schema(description = "Id del documento para el proceso", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
-//    private Long id_documento;
+    @Schema(description = "Nombre del documento para el proceso", example = "cancelación materia-sara", accessMode = Schema.AccessMode.READ_ONLY)
+    private String nombreDocumento;
 
     @Schema(description = "Nombre del tipo de la petición", example = "Cancelación de materia", accessMode = Schema.AccessMode.READ_ONLY)
     @NotBlank

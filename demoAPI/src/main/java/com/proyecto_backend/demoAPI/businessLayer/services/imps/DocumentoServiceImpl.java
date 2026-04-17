@@ -10,17 +10,18 @@ import com.proyecto_backend.demoAPI.persistenceLayer.daos.UsuarioDAO;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.DocumentoEntity;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.TipoDocumentoEntity;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.Usuario;
-import com.proyecto_backend.demoAPI.persistenceLayer.mappers.DocumentoMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class DocumentoServiceImpl implements IDocumentoService{
+public class DocumentoServiceImpl implements IDocumentoService {
 
     private final DocumentoDAO documentoDAO;
     private final UsuarioDAO usuarioDAO;
@@ -57,43 +58,43 @@ public class DocumentoServiceImpl implements IDocumentoService{
 
     //Obtener todos los documentos
     @Override
-    public List<DocumentoResponseDTO> getAllDocumento(){
+    public List<DocumentoResponseDTO> getAllDocumento() {
         return documentoDAO.findAll();
     }
 
     //Obtener documento por ID
     @Override
-    public DocumentoResponseDTO getDocumentoById(Long id){
+    public DocumentoResponseDTO getDocumentoById(Long id) {
         return documentoDAO.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Documento no encontrado con id: " + id));
     }
 
     //Obtener documento por nombre
-    public DocumentoResponseDTO getDocumentoByNombre(String nombre){
+    public DocumentoResponseDTO getDocumentoByNombre(String nombre) {
         return documentoDAO.findByNombre(nombre)
-                .orElseThrow(() -> new ResourceNotFoundException("El documento con nombre: "+ nombre+" no existe"));
+                .orElseThrow(() -> new ResourceNotFoundException("El documento con nombre: " + nombre + " no existe"));
     }
 
     //Obtener todos los documentos creados por un usuario
-    public List<DocumentoResponseDTO> getAllDocumentoByUsuarioCreador(String usuario){
-        Usuario usuarioCreador= usuarioDAO.buscarUsuarioEntidadPorCorreo(usuario)
-                .orElseThrow(() -> new ResourceNotFoundException("El usuario con correo:"+usuario+ "no existe"));
+    public List<DocumentoResponseDTO> getAllDocumentoByUsuarioCreador(String usuario) {
+        Usuario usuarioCreador = usuarioDAO.buscarUsuarioEntidadPorCorreo(usuario)
+                .orElseThrow(() -> new ResourceNotFoundException("El usuario con correo:" + usuario + "no existe"));
 
         return documentoDAO.findByUsuarioCreador(usuarioCreador.getIdUsuario());
     }
 
     //Obtener todos los documentos segun tipo de documento
-    public List<DocumentoResponseDTO> getAllDocumentoByTipoDocumento(String tipoDocumento){
-        TipoDocumentoEntity tipoDocumentoEntidad= tipoDocumentoDAO.findByNombreEntidad(tipoDocumento)
-                .orElseThrow(() -> new ResourceNotFoundException("El tipo de documento:"+tipoDocumento+ "no existe"));
+    public List<DocumentoResponseDTO> getAllDocumentoByTipoDocumento(String tipoDocumento) {
+        TipoDocumentoEntity tipoDocumentoEntidad = tipoDocumentoDAO.findByNombreEntidad(tipoDocumento)
+                .orElseThrow(() -> new ResourceNotFoundException("El tipo de documento:" + tipoDocumento + "no existe"));
 
         return documentoDAO.findByTipoDocumento(tipoDocumentoEntidad.getId());
     }
 
     @Override
     //Obtener todos los documentos segun fecha de creacion
-    public List<DocumentoResponseDTO> getAllDocumentoByFechaCreacion(LocalDate inicio, LocalDate fin){
-        return documentoDAO.findByFechaCreacion(inicio,fin);
+    public List<DocumentoResponseDTO> getAllDocumentoByFechaCreacion(LocalDate inicio, LocalDate fin) {
+        return documentoDAO.findByFechaCreacion(inicio, fin);
     }
 
     //Editar documento
@@ -114,6 +115,14 @@ public class DocumentoServiceImpl implements IDocumentoService{
         }
 
         return documentoDAO.update(id, dto)
+                .orElseThrow(() -> new ResourceNotFoundException("Documento no encontrado con id: " + id));
+    }
+
+    //Resuelve la entidad para usar en Peticion
+    @Override
+    @Transactional
+    public DocumentoEntity getDocumentoEntityById(Long id) {
+        return documentoDAO.findDocumentoEntityById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Documento no encontrado con id: " + id));
     }
 }
