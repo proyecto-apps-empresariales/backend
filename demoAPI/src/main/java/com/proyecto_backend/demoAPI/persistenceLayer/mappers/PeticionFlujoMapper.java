@@ -3,16 +3,14 @@ package com.proyecto_backend.demoAPI.persistenceLayer.mappers;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.PeticionFlujoCreateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.PeticionFlujoResponseDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.PeticionFlujoUpdateDTO;
-import com.proyecto_backend.demoAPI.persistenceLayer.entities.EstadoPeticionFlujoEntity;
-import com.proyecto_backend.demoAPI.persistenceLayer.entities.PeticionFlujoEntity;
-import com.proyecto_backend.demoAPI.persistenceLayer.entities.TipoPeticionFlujoEntity;
-import com.proyecto_backend.demoAPI.persistenceLayer.entities.Usuario;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public final class PeticionFlujoMapper {
 
+    //El constructor privado evita que se inyecte ya que es una clase utilitaria
     private PeticionFlujoMapper() {
     }
 
@@ -29,6 +27,7 @@ public final class PeticionFlujoMapper {
         dto.setId(entity.getId());
         dto.setRemitente(entity.getRemitente().getNombre() + " " + entity.getRemitente().getApellido());
         dto.setDestinatario(entity.getDestinatario().getNombre() + " " + entity.getDestinatario().getApellido());
+        dto.setDestinatario(entity.getDocumento().getNombre());
         dto.setTipoPeticion(entity.getTipoPeticion().getNombre());
         dto.setEstado(entity.getEstado().getNombre());
         dto.setFechaInicio(entity.getFechaInicio());
@@ -43,6 +42,7 @@ public final class PeticionFlujoMapper {
             PeticionFlujoCreateDTO dto,
             Usuario remitente,
             Usuario destinatario,
+            DocumentoEntity documento,
             TipoPeticionFlujoEntity tipoPeticion,
             EstadoPeticionFlujoEntity estado,
             LocalDate fechaFin) {
@@ -53,6 +53,7 @@ public final class PeticionFlujoMapper {
 
         entity.setRemitente(remitente);
         entity.setDestinatario(destinatario);
+        entity.setDocumento(documento);
         entity.setTipoPeticion(tipoPeticion);
         entity.setEstado(estado);
         entity.setFechaFin(fechaFin);
@@ -70,6 +71,7 @@ public final class PeticionFlujoMapper {
     //Solo en update se validan nulls ya que puede ser un patch
     public static void updateEntityFromDto(PeticionFlujoUpdateDTO dto,
                                            Usuario destinatario,
+                                           DocumentoEntity documento,
                                            TipoPeticionFlujoEntity tipoPeticion,
                                            LocalDate fechaFin,
                                            PeticionFlujoEntity entity) {
@@ -77,6 +79,7 @@ public final class PeticionFlujoMapper {
         if (dto == null || entity == null) return;
 
         if (destinatario != null) entity.setDestinatario(destinatario);
+        if (documento != null) entity.setDocumento(documento);
         if (tipoPeticion != null) entity.setTipoPeticion(tipoPeticion);
         if (fechaFin != null) entity.setFechaFin(fechaFin);
 

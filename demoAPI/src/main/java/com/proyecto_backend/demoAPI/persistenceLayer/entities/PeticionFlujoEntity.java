@@ -29,9 +29,9 @@ public class PeticionFlujoEntity {
     @JoinColumn(name = "id_usuario_destinatario")
     private Usuario destinatario;
 
-//    @OneToOne
-//    @JoinColumn(name = "id_documento")
-//    private Documento documento;
+    @OneToOne
+    @JoinColumn(name = "id_documento")
+    private DocumentoEntity documento;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipo_peticion_flujo)", nullable = false)

@@ -136,7 +136,8 @@ public class RequerimientoPeticionController {
     }
 
     // DELETE
-    @Operation(summary = "Eliminar requerimiento")
+    @Operation(summary = "Eliminar requerimiento",
+            description = "Elimina un requerimiento de petición con el Id")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Requerimiento eliminado"),
             @ApiResponse(responseCode = "404", description = "Requerimiento no encontrado",
