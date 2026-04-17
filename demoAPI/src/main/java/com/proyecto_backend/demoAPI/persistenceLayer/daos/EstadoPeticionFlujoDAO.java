@@ -83,4 +83,11 @@ public class EstadoPeticionFlujoDAO {
     public boolean existsByNombreIgnoreCare(String nombre) {
         return estadoRepository.existsByNombreIgnoreCase(nombre);
     }
+
+    //Se usa para el update
+    //Busca la peticion por el nombre, si encuentra peticion por el nombre, pero el id es diferente retorna true
+    //Si es true significa que ese nombre ya lo tiene otra entidad, entonces no actualiza
+    public boolean existsByNombreIgnoreCaseAndIdNot(String nombre, Long id) {
+        return estadoRepository.existsByNombreIgnoreCaseAndIdNot(nombre, id);
+    }
 }

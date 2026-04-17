@@ -5,6 +5,7 @@ import com.proyecto_backend.demoAPI.businessLayer.dtos.PeticionFlujoResponseDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.PeticionFlujoUpdateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.services.IEstadoPeticionFlujoService;
 import com.proyecto_backend.demoAPI.businessLayer.services.IPeticionFlujoService;
+import com.proyecto_backend.demoAPI.businessLayer.services.ITipoPeticionFlujoService;
 import com.proyecto_backend.demoAPI.businessLayer.services.IUsuarioService;
 import com.proyecto_backend.demoAPI.exceptions.BadRequestException;
 import com.proyecto_backend.demoAPI.exceptions.ConflictException;
@@ -31,12 +32,13 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
     private final PeticionFlujoDAO peticionDAO;
     private final IUsuarioService usuarioService;
     private final IEstadoPeticionFlujoService estadoService;
+    private final ITipoPeticionFlujoService tipoPeticionService;
 
     @Override
     @Transactional
     public PeticionFlujoResponseDTO createPeticion(PeticionFlujoCreateDTO createDTO) {
 
-        String nombreNormalizado = createDTO.getNombre().toLowerCase();
+        String nombreNormalizado = createDTO.getNombre().trim().toLowerCase();
         createDTO.setNombre(nombreNormalizado);
 
         //VAlida que no exista una petiion con el mismo nombre
@@ -47,8 +49,7 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
         Usuario remitente = usuarioService.buscarUsuarioEntityById(createDTO.getRemitente());
         Usuario destinatario = usuarioService.buscarUsuarioEntityById(createDTO.getDestinatario());
 
-        //TipoPeticionFlujoEntity tipoPeticion = ....
-        TipoPeticionFlujoEntity tipoPeticion = new TipoPeticionFlujoEntity();
+        TipoPeticionFlujoEntity tipoPeticion = tipoPeticionService.getTipoPeticionEntityById(createDTO.getTipoPeticion());
 
         //Setea el estado 1 por defecto => Estado CREADO
         EstadoPeticionFlujoEntity estadoPeticion = estadoService.getEstadoEntityById(1L);
@@ -78,7 +79,7 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
         return peticionDAO.findById(id)
                 .orElseThrow(() -> {
                     log.warn("Petición no encontrada con ID: {}", id);
-                    return new ResourceNotFoundException("Petición no encontrada con ID: {}" + id);
+                    return new ResourceNotFoundException("Petición no encontrada con ID: " + id);
                 });
     }
 
@@ -94,7 +95,7 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
         return peticionDAO.findByNombre(nombre)
                 .orElseThrow(() -> {
                     log.warn("Petición no encontrada con Nombre: {}", nombre);
-                    return new ResourceNotFoundException("Petición no encontrada con Nombre: {}" + nombre);
+                    return new ResourceNotFoundException("Petición no encontrada con Nombre: " + nombre);
                 });
     }
 
@@ -112,7 +113,7 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
 
         if (id == null) {
             log.warn("El Id del Remitente es obligatorio: {}", id);
-            throw new BadRequestException("El Id es obligatorio: {}" + id);
+            throw new BadRequestException("El Id es obligatorio: " + id);
         }
 
         log.debug("Obteniendo todas las Peticiones del Remitente por su Id");
@@ -126,7 +127,7 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
 
         if (id == null) {
             log.warn("El Id del Destinatario es obligatorio: {}", id);
-            throw new BadRequestException("El Id es obligatorio: {}" + id);
+            throw new BadRequestException("El Id es obligatorio: " + id);
         }
 
         log.debug("Obteniendo todas las Peticiones del Destinatario por su Id");
@@ -145,19 +146,18 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
             throw new BadRequestException("El Id es obligatorio");
         }
 
+        updateDTO.setNombre(updateDTO.getNombre().trim().toLowerCase());
+
         validateUpdateData(updateDTO);
 
-        //Si se va actualizar el nombre, se verifica que no alla otro tipo con el mismo nombre
-        PeticionFlujoResponseDTO existingEntity = this.getPeticionById(id);
-        if (!existingEntity.getNombre().equals(updateDTO.getNombre())) {
-            validateNombrePeticionUpdate(updateDTO);
-        }
+        //Si se va actualizar el nombre, se verifica que no alla otro tipo con el mismo nombre, se verifica con id
+        validateNombrePeticionUpdate(updateDTO, id);
 
-        Usuario destinatario = usuarioService.buscarUsuarioEntityById(id);
+        Usuario destinatario = usuarioService.buscarUsuarioEntityById(updateDTO.getDestinatario());
 
         //TipoPeticionFlujoEntity tipoPeticion = ....
         //Los estados se van a manejar desde endpoints en el controller para evitar tablas y enums
-        TipoPeticionFlujoEntity tipoPeticion = new TipoPeticionFlujoEntity();
+        TipoPeticionFlujoEntity tipoPeticion = tipoPeticionService.getTipoPeticionEntityById(updateDTO.getTipoPeticion());
 
         LocalDate fechaFin = updateDTO.getFechaFin();
 
@@ -180,7 +180,7 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
 
         if (id == null) {
             log.warn("El Id de la Petición es obligatorio: {}", id);
-            throw new BadRequestException("El Id es obligatorio: {}" + id);
+            throw new BadRequestException("El Id es obligatorio: " + id);
         }
 
         boolean deleted = peticionDAO.delete(id);
@@ -201,10 +201,10 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
         }
     }
 
-    //VAlida que el nombre de la peticion para hace rupdate
-    private void validateNombrePeticionUpdate(PeticionFlujoUpdateDTO updateDTO) {
-        if (peticionDAO.existsByNombreIgnoreCase(updateDTO.getNombre())) {
-            throw new ConflictException("El nombre de la petición la está en uso");
+    //VAlida que el nombre de la peticion para hacer update
+    private void validateNombrePeticionUpdate(PeticionFlujoUpdateDTO updateDTO, Long id) {
+        if (peticionDAO.existsByNombreIgnoreCaseAndIdNot(updateDTO.getNombre(), id)) {
+            throw new ConflictException("El nombre de la petición ya está en uso");
         }
     }
 
@@ -215,15 +215,113 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
         if (updateDTO.getDescripcion().isBlank()) throw new BadRequestException("La descripción es obligatoria");
     }
 
-    public PeticionFlujoEntity getEntityById(Long id) {
+    //Estados
+//    CREADO	1
+//    EN_REVISION	2
+//    APROBADO  3
+//    RECHAZADO	4
+//    FIRMADO	5
+//    FINALIZADO    6
+
+    //Enviar a revisión (CREADO → EN_REVISION)
+    @Override
+    @Transactional
+    public PeticionFlujoResponseDTO enviarRevision(Long id) {
 
         if (id == null) {
-            throw new BadRequestException("El id no es válido");
+            throw new BadRequestException("El id es obligatorio");
         }
 
-        return peticionDAO.findEntityById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+        EstadoPeticionFlujoEntity estadoRevision =
+                estadoService.getEstadoEntityById(2L);
+
+        return peticionDAO.cambiarEstado(id, 1L, estadoRevision)
+                .orElseThrow(() ->
+                        new ConflictException(
+                                "La petición no existe o no está en estado CREADO"
+                        )
+                );
     }
+
+    //Aprobar petición (EN_REVISION → APROBADO)
+    @Override
+    @Transactional
+    public PeticionFlujoResponseDTO aprobarPeticion(Long id) {
+
+        if (id == null) {
+            throw new BadRequestException("El id es obligatorio");
+        }
+
+        EstadoPeticionFlujoEntity estadoAprobado =
+                estadoService.getEstadoEntityById(3L);
+
+        return peticionDAO.cambiarEstado(id, 2L, estadoAprobado)
+                .orElseThrow(() ->
+                        new ConflictException(
+                                "La petición no existe o no está en estado EN_REVISION"
+                        )
+                );
+    }
+
+    //Rechazar petición (EN_REVISION → RECHAZADO)
+    @Override
+    @Transactional
+    public PeticionFlujoResponseDTO rechazarPeticion(Long id) {
+
+        if (id == null) {
+            throw new BadRequestException("El id es obligatorio");
+        }
+
+        EstadoPeticionFlujoEntity estadoRechazado =
+                estadoService.getEstadoEntityById(4L);
+
+        return peticionDAO.cambiarEstado(id, 2L, estadoRechazado)
+                .orElseThrow(() ->
+                        new ConflictException(
+                                "La petición no existe o no está en estado EN_REVISION"
+                        )
+                );
+    }
+
+    @Override
+    @Transactional
+    public PeticionFlujoResponseDTO firmarPeticion(Long id) {
+
+        if (id == null) {
+            throw new BadRequestException("El id es obligatorio");
+        }
+
+        EstadoPeticionFlujoEntity estadoFirmado =
+                estadoService.getEstadoEntityById(5L);
+
+        return peticionDAO.cambiarEstado(id, 3L, estadoFirmado)
+                .orElseThrow(() ->
+                        new ConflictException(
+                                "La petición no existe o no está en estado EN_REVISION"
+                        )
+                );
+    }
+
+    @Override
+    @Transactional
+    public PeticionFlujoResponseDTO finalizarPeticion(Long id) {
+
+        if (id == null) {
+            throw new BadRequestException("El id es obligatorio");
+        }
+
+        EstadoPeticionFlujoEntity estadoFinalizado =
+                estadoService.getEstadoEntityById(6L);
+
+        return peticionDAO.cambiarEstado(id, 5L, estadoFinalizado)
+                .orElseThrow(() ->
+                        new ConflictException(
+                                "La petición no existe o no está en estado FIRMADO"
+                        )
+                );
+    }
+
+
 }
 
 

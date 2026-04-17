@@ -14,4 +14,7 @@ public interface IRequerimientoPeticionRepository extends JpaRepository<Requerim
     Optional<RequerimientoPeticionEntity> findByNombre(String nombre);
 
     boolean existsByNombreIgnoreCase(String nombre);
+
+    boolean existsByNombreIgnoreCaseAndIdNot(String nombre, Long id);
+
 }

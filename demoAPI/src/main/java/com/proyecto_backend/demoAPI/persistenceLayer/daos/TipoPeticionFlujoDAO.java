@@ -4,6 +4,7 @@ import com.proyecto_backend.demoAPI.businessLayer.dtos.TipoPeticionFlujoCreateUp
 import com.proyecto_backend.demoAPI.businessLayer.dtos.TipoPeticionFlujoResponseDTO;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.RequerimientoPeticionEntity;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.TipoPeticionFlujoEntity;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.Usuario;
 import com.proyecto_backend.demoAPI.persistenceLayer.mappers.TipoPeticionFlujoMapper;
 import com.proyecto_backend.demoAPI.persistenceLayer.repositories.ITipoPeticionFlujoRepository;
 import lombok.RequiredArgsConstructor;
@@ -70,6 +71,11 @@ public class TipoPeticionFlujoDAO {
                 });
     }
 
+    // Metodo para buscar un tipo de petición por id y retornar la entidad resuelta(casos especiales):
+    public Optional<TipoPeticionFlujoEntity> findTipoPeticionEntityById (Long idUsuario) {
+        return tipoPeticionRepository.findById(idUsuario);
+    }
+
     //Eliminar tipo peticion por id
     public boolean delete(Long id) {
 
@@ -82,5 +88,12 @@ public class TipoPeticionFlujoDAO {
 
     public boolean existsByNombreIgnoreCase(String nombre) {
         return tipoPeticionRepository.existsByNombreIgnoreCase(nombre);
+    }
+
+    //Se usa para el update
+    //Busca el tipo de petición por el nombre, si encuentra peticion por el nombre, pero el id es diferente retorna true
+    //Si es true significa que ese nombre ya lo tiene otra entidad, entonces no actualiza
+    public boolean existsByNombreIgnoreCaseAndIdNot(String nombre, Long id) {
+        return tipoPeticionRepository.existsByNombreIgnoreCaseAndIdNot(nombre, id);
     }
 }

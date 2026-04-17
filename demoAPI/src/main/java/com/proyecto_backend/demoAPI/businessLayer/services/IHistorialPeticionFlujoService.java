@@ -8,12 +8,12 @@ import java.util.List;
 
 public interface IHistorialPeticionFlujoService {
 
-    public HistorialPeticionFlujoResponseDTO createHistorial(HistorialPeticionFlujoEntity entity);
+    HistorialPeticionFlujoResponseDTO createHistorial(HistorialPeticionFlujoEntity entity);
 
-    public HistorialPeticionFlujoResponseDTO getHistorialById(Long id);
+    HistorialPeticionFlujoResponseDTO getHistorialById(Long id);
 
-    public List<HistorialPeticionFlujoResponseDTO> getHistorialCompletoByPeticionId(Long id);
+    List<HistorialPeticionFlujoResponseDTO> getHistorialCompletoByPeticionId(Long id);
 
-    public List<HistorialPeticionFlujoResponseDTO> getHistorialCompletoByPeticionNombre(String nombre);
+    List<HistorialPeticionFlujoResponseDTO> getHistorialCompletoByPeticionNombre(String nombre);
 
 }

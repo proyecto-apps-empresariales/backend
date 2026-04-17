@@ -4,25 +4,36 @@ import com.proyecto_backend.demoAPI.businessLayer.dtos.PeticionFlujoCreateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.PeticionFlujoResponseDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.PeticionFlujoUpdateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.services.imps.PeticionFlujoServiceImpl;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.PeticionFlujoEntity;
 
 import java.util.List;
 
 public interface IPeticionFlujoService {
 
-    public PeticionFlujoResponseDTO createPeticion(PeticionFlujoCreateDTO createDTO);
+    PeticionFlujoResponseDTO createPeticion(PeticionFlujoCreateDTO createDTO);
 
-    public PeticionFlujoResponseDTO getPeticionById(Long id);
+    PeticionFlujoResponseDTO getPeticionById(Long id);
 
-    public PeticionFlujoResponseDTO getPeticionByNombre(String nombre);
+    PeticionFlujoResponseDTO getPeticionByNombre(String nombre);
 
-    public List<PeticionFlujoResponseDTO> getAllPeticiones();
+    List<PeticionFlujoResponseDTO> getAllPeticiones();
 
-    public List<PeticionFlujoResponseDTO> getAllPeticionesByRemitenteId(Long id);
+    List<PeticionFlujoResponseDTO> getAllPeticionesByRemitenteId(Long id);
 
-    public List<PeticionFlujoResponseDTO> getAllPeticionesByDestinatarioId(Long id);
+    List<PeticionFlujoResponseDTO> getAllPeticionesByDestinatarioId(Long id);
 
-    public PeticionFlujoResponseDTO updatePeticion(Long id, PeticionFlujoUpdateDTO updateDTO);
+    PeticionFlujoResponseDTO updatePeticion(Long id, PeticionFlujoUpdateDTO updateDTO);
 
-    public void deletePeticion(Long id);
+    void deletePeticion(Long id);
+
+    PeticionFlujoResponseDTO enviarRevision(Long id);
+
+    PeticionFlujoResponseDTO aprobarPeticion(Long id);
+
+    PeticionFlujoResponseDTO rechazarPeticion(Long id);
+
+    PeticionFlujoResponseDTO firmarPeticion(Long id);
+
+    PeticionFlujoResponseDTO finalizarPeticion(Long id);
 
 }

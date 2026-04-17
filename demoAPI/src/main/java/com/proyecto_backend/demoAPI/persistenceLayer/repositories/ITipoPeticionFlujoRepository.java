@@ -12,4 +12,6 @@ public interface ITipoPeticionFlujoRepository extends JpaRepository<TipoPeticion
 
     boolean existsByNombreIgnoreCase(String nombre);
 
+    boolean existsByNombreIgnoreCaseAndIdNot(String nombre, Long id);
+
 }

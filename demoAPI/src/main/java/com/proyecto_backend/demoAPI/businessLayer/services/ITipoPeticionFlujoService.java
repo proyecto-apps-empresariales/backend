@@ -2,20 +2,24 @@ package com.proyecto_backend.demoAPI.businessLayer.services;
 
 import com.proyecto_backend.demoAPI.businessLayer.dtos.TipoPeticionFlujoCreateUpdateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.TipoPeticionFlujoResponseDTO;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.TipoPeticionFlujoEntity;
 
 import java.util.List;
 
 public interface ITipoPeticionFlujoService {
 
-    public TipoPeticionFlujoResponseDTO createTipoPeticionFlujo(TipoPeticionFlujoCreateUpdateDTO createDTO);
+    TipoPeticionFlujoResponseDTO createTipoPeticionFlujo(TipoPeticionFlujoCreateUpdateDTO createDTO);
 
-    public TipoPeticionFlujoResponseDTO getTipoPeticionFlujoById(Long id);
+    TipoPeticionFlujoResponseDTO getTipoPeticionFlujoById(Long id);
 
-    public TipoPeticionFlujoResponseDTO getTipoPeticionFlujoByNombre(String nombre);
+    TipoPeticionFlujoResponseDTO getTipoPeticionFlujoByNombre(String nombre);
 
-    public List<TipoPeticionFlujoResponseDTO> getAlTipoPeticionFlujos();
+    List<TipoPeticionFlujoResponseDTO> getAllTipoPeticionFlujos();
 
-    public TipoPeticionFlujoResponseDTO updateTipoPeticionFlujo(Long id, TipoPeticionFlujoCreateUpdateDTO updateDTO);
+    TipoPeticionFlujoResponseDTO updateTipoPeticionFlujo(Long id, TipoPeticionFlujoCreateUpdateDTO updateDTO);
 
-    public void deleteTipoPeticionFlujo(Long id);
+    void deleteTipoPeticionFlujo(Long id);
+
+    TipoPeticionFlujoEntity getTipoPeticionEntityById(Long id);
+
 }
