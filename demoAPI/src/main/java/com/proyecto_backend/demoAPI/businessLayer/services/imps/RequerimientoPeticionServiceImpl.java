@@ -27,8 +27,7 @@ public class RequerimientoPeticionServiceImpl implements IRequerimientoPeticionS
     @Transactional
     public RequerimientoPeticionResponseDTO createRequerimiento(RequerimientoPeticionCreateUpdateDTO createDTO) {
 
-        String nombreNormalizado = createDTO.getNombre().toLowerCase();
-        createDTO.setNombre(nombreNormalizado);
+        createDTO.setNombre(createDTO.getNombre().trim().toLowerCase());
 
         validateNombreRequerimiento(createDTO);
 
@@ -49,12 +48,12 @@ public class RequerimientoPeticionServiceImpl implements IRequerimientoPeticionS
             throw new BadRequestException("El id es obligatorio");
         }
 
-        log.debug("Buscando Petición por ID: {}", id);
+        log.debug("Buscando Requerimiento por ID: {}", id);
 
         return requerimientoDAO.findById(id)
                 .orElseThrow(() ->{
                     log.warn("Requerimiento no encontrado con ID: {}", id);
-                    return new ResourceNotFoundException("Requerimiento no encontrado con ID: {}" + id);
+                    return new ResourceNotFoundException("Requerimiento no encontrado con ID: " + id);
                 });
     }
 
@@ -67,12 +66,12 @@ public class RequerimientoPeticionServiceImpl implements IRequerimientoPeticionS
             throw new BadRequestException("El nombre es obligatorio");
         }
 
-        log.debug("Buscando Petición por nombre: {}", nombre);
+        log.debug("Buscando Requerimiento por nombre: {}", nombre);
 
         return requerimientoDAO.findByNombre(nombre)
                 .orElseThrow(() ->{
                     log.warn("Requerimiento no encontrado con nombre: {}", nombre);
-                    return new ResourceNotFoundException("Requerimiento no encontrado con nombre: {}" + nombre);
+                    return new ResourceNotFoundException("Requerimiento no encontrado con nombre: " + nombre);
                 });
     }
 
@@ -92,20 +91,16 @@ public class RequerimientoPeticionServiceImpl implements IRequerimientoPeticionS
             throw new BadRequestException("El id es obligatorio");
         }
 
-        validateUpdateData(updateDTO);
+        updateDTO.setNombre(updateDTO.getNombre().trim().toLowerCase());
 
         //Si se va actualizar el nombre, se verifica que no alla otro tipo con el mismo nombre
-        RequerimientoPeticionResponseDTO existingEntity = this.getRequerimientoById(id);
-        if (!existingEntity.getNombre().equals(updateDTO.getNombre())) {
-            validateNombreRequerimiento(updateDTO);
-        }
-
+        validateNombreRequerimientoUpdate(updateDTO, id);
         log.info("Actualizando Peticion: {}", updateDTO.getNombre());
 
         RequerimientoPeticionResponseDTO updatedRequerimiento = requerimientoDAO.update(id, updateDTO)
                 .orElseThrow(() -> {
                     log.warn("No se encontró el requerimiento con Id: {}", id);
-                    return new ResourceNotFoundException("No se encotró la petición con ID: " + id);
+                    return new ResourceNotFoundException("No se encotró el Requerimiento con ID: " + id);
                 });
         log.info("Requerimiento actualizado exitosamente con ID: {}", updatedRequerimiento.getId());
         return  updatedRequerimiento;
@@ -122,7 +117,7 @@ public class RequerimientoPeticionServiceImpl implements IRequerimientoPeticionS
     public void deleteRequerimiento(Long id) {
 
         if (id == null) {
-            log.warn("El Id del requerimiento es obligatorio: {}", id);
+            log.warn("El Id de requerimiento es obligatorio: {}", id);
             throw new BadRequestException("El id es obligatorio");
         }
 
@@ -136,16 +131,17 @@ public class RequerimientoPeticionServiceImpl implements IRequerimientoPeticionS
         log.info("Requerimiento eliminado correctamente ID: {}", id);
     }
 
-    //VAlida que el nombre de la peticion no este en uso
+    //VAlida que el nombre del requerimiento no este en uso
     private void validateNombreRequerimiento(RequerimientoPeticionCreateUpdateDTO createDTO) {
         if (requerimientoDAO.existsByNombreIgnoreCase(createDTO.getNombre())) {
-            throw new ConflictException("El nombre de la petición la está en uso");
+            throw new ConflictException("El nombre del Requerimiento ya está en uso");
         }
     }
 
     //VAlida los datos del update
-    private void validateUpdateData(RequerimientoPeticionCreateUpdateDTO updateDTO) {
-        if (updateDTO.getNombre().isBlank()) throw new BadRequestException("El nombre es obligatorio");
-        if (updateDTO.getDescripcion().isBlank()) throw new BadRequestException("La descripción es obligatoria");
+    private void validateNombreRequerimientoUpdate(RequerimientoPeticionCreateUpdateDTO updateDTO, Long id) {
+        if (requerimientoDAO.existsByNombreIgnoreCaseAndIdNot(updateDTO.getNombre(), id)) {
+            throw new ConflictException("El nombre del Requerimiento ya está en uso");
+        }
     }
 }

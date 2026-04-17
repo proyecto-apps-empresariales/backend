@@ -9,6 +9,7 @@ import com.proyecto_backend.demoAPI.exceptions.ConflictException;
 import com.proyecto_backend.demoAPI.exceptions.ResourceNotFoundException;
 import com.proyecto_backend.demoAPI.persistenceLayer.daos.TipoPeticionFlujoDAO;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.RequerimientoPeticionEntity;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.TipoPeticionFlujoEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,10 +29,10 @@ public class TipoPeticionFlujoServiceImpl implements ITipoPeticionFlujoService {
     @Override
     @Transactional
     public TipoPeticionFlujoResponseDTO createTipoPeticionFlujo(TipoPeticionFlujoCreateUpdateDTO createDTO) {
-        String nombreNormalizado = createDTO.getNombre().toLowerCase();
+        String nombreNormalizado = createDTO.getNombre().trim().toLowerCase();
         createDTO.setNombre(nombreNormalizado);
 
-        validateNombreRequerimiento(createDTO);
+        validateNombreTipoPeticion(createDTO);
 
         List<RequerimientoPeticionEntity> requerimientosEntities = requerimientoService.getAllByNombreIn(createDTO.getRequerimientos());
 
@@ -61,7 +62,23 @@ public class TipoPeticionFlujoServiceImpl implements ITipoPeticionFlujoService {
         return tipoPeticionDAO.findById(id)
                 .orElseThrow(() -> {
                     log.warn("TipoPeticion no encontrado con ID: {}", id);
-                    return new ResourceNotFoundException("TipoPetición no encontrado con ID: {}" + id);
+                    return new ResourceNotFoundException("TipoPetición no encontrado con ID: " + id);
+                });
+    }
+
+    @Override
+    public TipoPeticionFlujoEntity getTipoPeticionEntityById(Long id) {
+        if (id == null) {
+            log.warn("El Id del tipo de petición es obligatorio: {}", id);
+            throw new BadRequestException("El id es obligatorio");
+        }
+
+        log.debug("Buscando el TipoPetición por ID: {}", id);
+
+        return tipoPeticionDAO.findTipoPeticionEntityById(id)
+                .orElseThrow(() -> {
+                    log.warn("El TipoPeticion no fue encontrado con ID: {}", id);
+                    return new ResourceNotFoundException("TipoPetición no encontrado con ID: " + id);
                 });
     }
 
@@ -77,15 +94,15 @@ public class TipoPeticionFlujoServiceImpl implements ITipoPeticionFlujoService {
         log.debug("Buscando TipoPetición por nombre: {}", nombre);
 
         return tipoPeticionDAO.findByNombre(nombre)
-                .orElseThrow(() ->{
+                .orElseThrow(() -> {
                     log.warn("TipoPetición no encontrado con nombre: {}", nombre);
-                    return new ResourceNotFoundException("TipoPetición no encontrado con nombre: {}" + nombre);
+                    return new ResourceNotFoundException("TipoPetición no encontrado con nombre: " + nombre);
                 });
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<TipoPeticionFlujoResponseDTO> getAlTipoPeticionFlujos() {
+    public List<TipoPeticionFlujoResponseDTO> getAllTipoPeticionFlujos() {
         log.debug("Obteniendo todos los TipoPetición");
         return tipoPeticionDAO.findAll();
     }
@@ -99,14 +116,10 @@ public class TipoPeticionFlujoServiceImpl implements ITipoPeticionFlujoService {
             throw new BadRequestException("El id es obligatorio");
         }
 
-        validateUpdateData(updateDTO);
-        log.info("Actualizando TipoPetición: {}", updateDTO.getNombre());
+        updateDTO.setNombre(updateDTO.getNombre().trim().toLowerCase());
 
-        //Si se va actualizar el nombre, se verifica que no alla otro tipo con el mismo nombre
-        TipoPeticionFlujoResponseDTO existingEntity = this.getTipoPeticionFlujoById(id);
-        if (!existingEntity.getNombre().equals(updateDTO.getNombre())) {
-            validateNombreRequerimiento(updateDTO);
-        }
+        validateNombreTipoPeticionUpdate(updateDTO, id);
+        log.info("Actualizando TipoPetición: {}", updateDTO.getNombre());
 
         List<RequerimientoPeticionEntity> requerimientosEntities = requerimientoService.getAllByNombreIn(updateDTO.getRequerimientos());
 
@@ -120,14 +133,14 @@ public class TipoPeticionFlujoServiceImpl implements ITipoPeticionFlujoService {
                     return new ResourceNotFoundException("No se encotró TipoPetición con ID: " + id);
                 });
         log.info("TipoPetición actualizado exitosamente con ID: {}", updatedTipoPeticion.getId());
-        return  updatedTipoPeticion;
+        return updatedTipoPeticion;
     }
 
     @Override
     @Transactional
     public void deleteTipoPeticionFlujo(Long id) {
         if (id == null) {
-            log.warn("El Id del TipoPetición es obligatorio: {}", id);
+            log.warn("El Id de TipoPetición es obligatorio: {}", id);
             throw new BadRequestException("El id es obligatorio");
         }
 
@@ -142,18 +155,16 @@ public class TipoPeticionFlujoServiceImpl implements ITipoPeticionFlujoService {
     }
 
     //VAlida que el nombre de la peticion no este en uso
-    private void validateNombreRequerimiento(TipoPeticionFlujoCreateUpdateDTO createDTO) {
+    private void validateNombreTipoPeticion(TipoPeticionFlujoCreateUpdateDTO createDTO) {
         if (tipoPeticionDAO.existsByNombreIgnoreCase(createDTO.getNombre())) {
-            throw new ConflictException("El nombre de la petición la está en uso");
+            throw new ConflictException("El nombre del Tipo de Petición ya está en uso");
         }
     }
 
-    //VAlida los datos del update
-    private void validateUpdateData(TipoPeticionFlujoCreateUpdateDTO updateDTO) {
-        if (updateDTO.getNombre().isBlank()) throw new BadRequestException("El nombre es obligatorio");
-        if (updateDTO.getDescripcion().isBlank()) throw new BadRequestException("La descripción es obligatoria");
-        if (updateDTO.getInstruccionesPdf().isBlank()) throw new BadRequestException("Debes adjuntar el pdf con instrucciones"); //Ruta de las instrucciones
-        if (updateDTO.getRequerimientos().isEmpty()) throw new BadRequestException("Necesitas requerimientos para crear el TipoPetición");
+    private void validateNombreTipoPeticionUpdate(TipoPeticionFlujoCreateUpdateDTO updateDTO, Long id) {
+        if (tipoPeticionDAO.existsByNombreIgnoreCaseAndIdNot(updateDTO.getNombre(), id)) {
+            throw new ConflictException("El nombre del Tipo de Petición ya está en uso");
+        }
     }
 
 }

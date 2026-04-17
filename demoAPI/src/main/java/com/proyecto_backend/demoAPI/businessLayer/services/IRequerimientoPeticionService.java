@@ -8,19 +8,18 @@ import java.util.List;
 
 public interface  IRequerimientoPeticionService {
 
-    public RequerimientoPeticionResponseDTO createRequerimiento(RequerimientoPeticionCreateUpdateDTO createDTO);
+    RequerimientoPeticionResponseDTO createRequerimiento(RequerimientoPeticionCreateUpdateDTO createDTO);
 
-    public RequerimientoPeticionResponseDTO getRequerimientoById(Long id);
+    RequerimientoPeticionResponseDTO getRequerimientoById(Long id);
 
-    public RequerimientoPeticionResponseDTO getRequerimientoByNombre(String nombre);
+    RequerimientoPeticionResponseDTO getRequerimientoByNombre(String nombre);
 
-    public List<RequerimientoPeticionResponseDTO> getAllRequerimientos();
+    List<RequerimientoPeticionResponseDTO> getAllRequerimientos();
 
-    public RequerimientoPeticionResponseDTO updateRequerimiento(Long id, RequerimientoPeticionCreateUpdateDTO updateDTO);
+    RequerimientoPeticionResponseDTO updateRequerimiento(Long id, RequerimientoPeticionCreateUpdateDTO updateDTO);
 
-    public void deleteRequerimiento(Long id);
+    void deleteRequerimiento(Long id);
 
-    public List<RequerimientoPeticionEntity> getAllByNombreIn(List<String> nombres);
-
+    List<RequerimientoPeticionEntity> getAllByNombreIn(List<String> nombres);
 
 }

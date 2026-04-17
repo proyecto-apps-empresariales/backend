@@ -121,9 +121,36 @@ public class PeticionFlujoDAO {
 
     //Buscar peticion por nombre
     public Optional<PeticionFlujoResponseDTO> findByNombre(String nombre) {
-
         return peticionRepository.findByNombre(nombre)
                 .map(PeticionFlujoMapper::toDTO);
+    }
+
+    //Se usa para el update
+    //Busca la peticion por el nombre, si encuentra peticion por el nombre, pero el id es diferente retorna true
+    //Si es true significa que ese nombre ya lo tiene otra entidad, entonces no actualiza
+    public boolean existsByNombreIgnoreCaseAndIdNot(String nombre, Long id) {
+        return peticionRepository.existsByNombreIgnoreCaseAndIdNot(nombre, id);
+    }
+
+    //Cambia el estado de la peticion
+    //Veficica que el estado actual de la peticion corresponsa al estado esperado para poder pasar al siguiente estado
+    public Optional<PeticionFlujoResponseDTO> cambiarEstado(
+            Long id,
+            Long estadoActualEsperadoId,
+            EstadoPeticionFlujoEntity nuevoEstado
+    ) {
+
+        return peticionRepository.findById(id)
+                .filter(existingEntity ->
+                        existingEntity.getEstado().getId().equals(estadoActualEsperadoId)
+                )
+                .map(existingEntity -> {
+
+                    existingEntity.setEstado(nuevoEstado);
+                    peticionRepository.save(existingEntity);
+
+                    return PeticionFlujoMapper.toDTO(existingEntity);
+                });
     }
 
 }

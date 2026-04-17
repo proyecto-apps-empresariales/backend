@@ -2,7 +2,6 @@ package com.proyecto_backend.demoAPI.businessLayer.services.imps;
 
 import com.proyecto_backend.demoAPI.businessLayer.dtos.EstadoPeticionFlujoCreateUpdateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.EstadoPeticionFlujoResponseDTO;
-import com.proyecto_backend.demoAPI.businessLayer.dtos.TipoPeticionFlujoResponseDTO;
 import com.proyecto_backend.demoAPI.businessLayer.services.IEstadoPeticionFlujoService;
 import com.proyecto_backend.demoAPI.exceptions.BadRequestException;
 import com.proyecto_backend.demoAPI.exceptions.ConflictException;
@@ -105,14 +104,9 @@ public class EstadoPeticionFlujoServiceImpl implements IEstadoPeticionFlujoServi
             throw new BadRequestException("El Id es obligatorio");
         }
 
-        validateUpdate(updateDTO);
         normalizeNombre(updateDTO);
 
-        //Si se va actualizar el nombre, se verifica que no alla otro tipo con el mismo nombre
-        EstadoPeticionFlujoResponseDTO existingEntity = this.getEstadoById(id);
-        if (!existingEntity.getNombre().equals(updateDTO.getNombre())) {
-            validateDuplicatedName(updateDTO);
-        }
+        validateNombreEstadoUpdate(updateDTO, id);
 
         EstadoPeticionFlujoResponseDTO updatedEstado = estadoDAO.update(id, updateDTO)
                 .orElseThrow(() -> {
@@ -163,14 +157,9 @@ public class EstadoPeticionFlujoServiceImpl implements IEstadoPeticionFlujoServi
         }
     }
 
-    private void validateUpdate(EstadoPeticionFlujoCreateUpdateDTO updateDTO) {
-
-        if (updateDTO.getNombre().trim().isEmpty()) {
-            throw new BadRequestException("El nombre no puede estar vacío");
-        }
-
-        if (updateDTO.getDescripcion().isBlank()) {
-            throw new BadRequestException("La descripción no puede estar vacía");
+    private void validateNombreEstadoUpdate(EstadoPeticionFlujoCreateUpdateDTO updateDTO, Long id) {
+        if (estadoDAO.existsByNombreIgnoreCaseAndIdNot(updateDTO.getNombre(), id)) {
+            throw new ConflictException("El nombre de la petición ya está en uso");
         }
     }
 
