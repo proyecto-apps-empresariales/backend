@@ -4,14 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.proyecto_backend.demoAPI.businessLayer.dtos.UsuarioCreateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.UsuarioDTO;
@@ -21,67 +14,126 @@ import com.proyecto_backend.demoAPI.businessLayer.services.IUsuarioService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/usuarios")
 @RequiredArgsConstructor
+@Tag(name = "Usuarios", description = "Operaciones CRUD para gestión de usuarios")
 public class UsuarioController {
 
-    // Creamos las instancias de los servicios correspondientes:
     private final IUsuarioService usuarioService;
 
-    // Endpoint para guardar un usuario:
     @PostMapping
-    public ResponseEntity<UsuarioDTO> guardarUsuario (@Valid @RequestBody UsuarioCreateDTO dto) {
+    @Operation(summary = "Crear usuario", description = "Registra un nuevo usuario en el sistema")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Usuario creado exitosamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos"),
+            @ApiResponse(responseCode = "409", description = "Correo ya registrado")
+    })
+    public ResponseEntity<UsuarioDTO> guardarUsuario(
+            @Parameter(description = "Datos del usuario a crear", required = true) @Valid @RequestBody UsuarioCreateDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.guardarUsuario(dto));
     }
 
-    // Endpoint para retornar la lista de usuarios:
     @GetMapping
+    @Operation(summary = "Listar usuarios", description = "Obtiene la lista completa de usuarios registrados")
+    @ApiResponse(responseCode = "200", description = "Lista de usuarios obtenida exitosamente")
     public ResponseEntity<List<UsuarioDTO>> listaUsuarios() {
         return ResponseEntity.ok(usuarioService.listaUsuarios());
     }
 
-    // Endpoint para buscar un usuario por id:
     @GetMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> buscarUsuarioPorId (@PathVariable Long idUsuario) {
+    @Operation(summary = "Buscar usuario por ID", description = "Obtiene la información de un usuario específico")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuario encontrado"),
+            @ApiResponse(responseCode = "400", description = "ID inválido"),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+    })
+    public ResponseEntity<UsuarioDTO> buscarUsuarioPorId(
+            @Parameter(description = "ID del usuario", required = true, example = "1") @PathVariable Long idUsuario) {
         return ResponseEntity.ok(usuarioService.buscarUsuarioPorId(idUsuario));
     }
 
-    // Endpoint para buscar un usuario por correo:
     @GetMapping("/correo/{correoUsuario}")
-    public ResponseEntity<UsuarioDTO> buscarUsuarioPorCorreo (@PathVariable String correoUsuario) {
+    @Operation(summary = "Buscar usuario por correo", description = "Obtiene un usuario a partir de su correo electrónico")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuario encontrado"),
+            @ApiResponse(responseCode = "400", description = "Correo inválido"),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+    })
+    public ResponseEntity<UsuarioDTO> buscarUsuarioPorCorreo(
+            @Parameter(description = "Correo del usuario", required = true, example = "usuario@correo.com") @PathVariable String correoUsuario) {
         return ResponseEntity.ok(usuarioService.buscarUsuarioPorCorreo(correoUsuario));
     }
 
-    // Metodo para obtener un usuario por medio de su correo y contrasena:
     @GetMapping("/login/{correoUsuario}/{contrasenaUsuario}")
-    public ResponseEntity<UsuarioDTO> loginUsuario (@PathVariable String correoUsuario, @PathVariable String contrasenaUsuario) {
+    @Operation(summary = "Login de usuario", description = "Valida las credenciales de un usuario")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login exitoso"),
+            @ApiResponse(responseCode = "400", description = "Correo o contraseña inválidos"),
+            @ApiResponse(responseCode = "401", description = "Contraseña incorrecta"),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+    })
+    public ResponseEntity<UsuarioDTO> loginUsuario(
+            @Parameter(description = "Correo del usuario", required = true) @PathVariable String correoUsuario,
+            @Parameter(description = "Contraseña del usuario", required = true) @PathVariable String contrasenaUsuario) {
         return ResponseEntity.ok(usuarioService.buscarUsuarioPorCorreoYContrasena(correoUsuario, contrasenaUsuario));
     }
 
-    // Endpoint para retornar lista de usuarios por organizacion:
     @GetMapping("/organizacion/{idOrganizacion}")
-    public ResponseEntity<List<UsuarioDTO>> listaUsuariosPorOrganizacion (@PathVariable Long idOrganizacion) {
+    @Operation(summary = "Listar usuarios por organización", description = "Obtiene la lista de usuarios asociados a una organización")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista obtenida exitosamente"),
+            @ApiResponse(responseCode = "400", description = "ID inválido"),
+            @ApiResponse(responseCode = "404", description = "Organización no encontrada")
+    })
+    public ResponseEntity<List<UsuarioDTO>> listaUsuariosPorOrganizacion(
+            @Parameter(description = "ID de la organización", required = true, example = "10") @PathVariable Long idOrganizacion) {
         return ResponseEntity.ok(usuarioService.listaUsuariosPorOrganizacion(idOrganizacion));
     }
 
-    // Endpoint para actualizar un usuario:
     @PutMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> actualizarUsuario (@Valid @RequestBody UsuarioUpdateDTO dto,
-            @PathVariable Long idUsuario) {
+    @Operation(summary = "Actualizar usuario", description = "Actualiza la información de un usuario existente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuario actualizado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos"),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+    })
+    public ResponseEntity<UsuarioDTO> actualizarUsuario(
+            @Parameter(description = "Datos actualizados del usuario", required = true) @Valid @RequestBody UsuarioUpdateDTO dto,
+            @Parameter(description = "ID del usuario a actualizar", required = true, example = "1") @PathVariable Long idUsuario) {
         return ResponseEntity.ok(usuarioService.actualizarUsuario(dto, idUsuario));
     }
 
-    // Endpoint para actualizar la contrasena de un usuario:
     @PutMapping("/contrasena")
-    public ResponseEntity<UsuarioDTO> actualizarContrasena (@Valid @RequestBody UsuarioUpdateContrasenaDTO dto) {
+    @Operation(summary = "Actualizar contraseña", description = "Actualiza la contraseña de un usuario")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Contraseña actualizada exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos o contraseñas no coinciden"),
+            @ApiResponse(responseCode = "401", description = "Contraseña actual incorrecta"),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+    })
+    public ResponseEntity<UsuarioDTO> actualizarContrasena(
+            @Parameter(description = "Datos para actualizar la contraseña", required = true) @Valid @RequestBody UsuarioUpdateContrasenaDTO dto) {
         return ResponseEntity.ok(usuarioService.actualizarContrasena(dto));
     }
 
-    // Endpoint para eliminar un usuario:
     @DeleteMapping("/{idUsuario}")
-    public ResponseEntity<Void> eliminarUsuario (@PathVariable Long idUsuario) {
+    @Operation(summary = "Eliminar usuario", description = "Elimina un usuario del sistema")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Usuario eliminado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "ID inválido"),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+    })
+    public ResponseEntity<Void> eliminarUsuario(
+            @Parameter(description = "ID del usuario a eliminar", required = true, example = "1") @PathVariable Long idUsuario) {
         usuarioService.eliminarUsuario(idUsuario);
         return ResponseEntity.noContent().build();
     }

@@ -1,5 +1,6 @@
 package com.proyecto_backend.demoAPI.businessLayer.dtos;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -11,16 +12,17 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "DTO para la creación de un Rol")
 public class RolCreateDTO {
-    
-    // Atributos de la clase RolCreateDTO:
-    // @NotBlank valida que un String no sea null, no este vacio "" ó no contenga solo espacios " ".
-    // @Size(min = m, max = n) valida que el atributo tenga minimo m y maximo n caracteres.
-    @NotBlank
-    @Size(min = 3, max = 20)
+
+    @Schema(description = "Nombre del rol", example = "Administrador")
+    @NotBlank(message = "El nombre no puede estar vacío")
+    @Size(min = 3, max = 20, message = "Debe tener entre 3 y 20 caracteres")
     private String nombre;
-    @NotBlank
-    @Size(min = 3, max = 250)
+
+    @Schema(description = "Descripción del rol", example = "Rol con permisos de administración en el sistema")
+    @NotBlank(message = "La descripción no puede estar vacía")
+    @Size(min = 3, max = 250, message = "Debe tener entre 3 y 250 caracteres")
     private String descripcion;
-    
+
 }
