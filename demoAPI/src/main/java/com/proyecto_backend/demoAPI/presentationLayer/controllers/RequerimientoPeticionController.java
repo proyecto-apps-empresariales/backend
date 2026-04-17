@@ -24,7 +24,7 @@ import java.util.List;
 @RequestMapping("/requerimiento-peticion")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "Requerimiento", description = "Operaciones CRUD para requerimientos")
+@Tag(name = "Requerimientos de Petición", description = "Operaciones CRUD para requerimientos")
 @CrossOrigin(origins = "*")
 public class RequerimientoPeticionController {
 
