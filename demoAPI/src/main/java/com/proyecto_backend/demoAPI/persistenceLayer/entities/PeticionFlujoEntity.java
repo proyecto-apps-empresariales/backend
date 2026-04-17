@@ -41,8 +41,8 @@ public class PeticionFlujoEntity {
     @JoinColumn(name = "id_estado_peticion_flujo", nullable = false)
     private EstadoPeticionFlujoEntity estado;
 
-    @Column(nullable = false)
     @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDateTime fechaInicio;
 
     @Column(nullable = false)

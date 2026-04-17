@@ -63,6 +63,7 @@ public class UsuarioDAO {
 
     }
 
+
     // Metodo para buscar un usuario por correo y retornar la entidad (casos especiales):
     public Optional<Usuario> buscarUsuarioEntidadPorCorreo (String correoUsuario) {
 

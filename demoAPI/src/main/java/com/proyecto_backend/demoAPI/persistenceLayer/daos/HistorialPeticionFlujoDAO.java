@@ -52,4 +52,11 @@ public class HistorialPeticionFlujoDAO {
         return HistorialPeticionFlujoMapper.toDTOList(entities);
     }
 
+    //Buscar todos los registros de un proceso/peticion especifica por el nombre ordenado del mas reciente al mas viejo (Desc)
+    public List<HistorialPeticionFlujoResponseDTO> findAllByPeticionNombreOrderByFecha(String nombre) {
+
+        List<HistorialPeticionFlujoEntity> entities = historialRepository.findAllByPeticionNombreOrderByFecha(nombre);
+        return HistorialPeticionFlujoMapper.toDTOList(entities);
+    }
+
 }

@@ -7,6 +7,7 @@ import com.proyecto_backend.demoAPI.exceptions.BadRequestException;
 import com.proyecto_backend.demoAPI.exceptions.ConflictException;
 import com.proyecto_backend.demoAPI.exceptions.ResourceNotFoundException;
 import com.proyecto_backend.demoAPI.persistenceLayer.daos.EstadoPeticionFlujoDAO;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.EstadoPeticionFlujoEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,8 +28,7 @@ public class EstadoPeticionFlujoServiceImpl implements IEstadoPeticionFlujoServi
     @Transactional
     public EstadoPeticionFlujoResponseDTO createEstado(EstadoPeticionFlujoCreateUpdateDTO createDTO) {
 
-        String nombreNormalizado = createDTO.getNombre().trim().toLowerCase();
-        createDTO.setNombre(nombreNormalizado);
+        normalizeNombre(createDTO);
 
         //Valida el nombre del estado
         validateDuplicatedName(createDTO);
@@ -48,7 +48,7 @@ public class EstadoPeticionFlujoServiceImpl implements IEstadoPeticionFlujoServi
 
         //Verifica que el id no sea nulo
         if (id == null) {
-            log.warn("El Id es obligatorio: {}", id);
+            log.warn("El Id del Estado es obligatorio: {}", id);
             throw new BadRequestException("El Id es obligatorio");
         }
 
@@ -58,16 +58,16 @@ public class EstadoPeticionFlujoServiceImpl implements IEstadoPeticionFlujoServi
                 .orElseThrow(() -> {
                     log.warn("Estado no encontrado con ID: {}", id);
 
-                    return new ResourceNotFoundException("Producto no con encontrado. Id: " + id);
+                    return new ResourceNotFoundException("Estado no con encontrado. Id: " + id);
                 });
     }
 
-    //Buscar Estado por le nombre
+    //Buscar Estado por el nombre
     @Override
     @Transactional(readOnly = true)
     public EstadoPeticionFlujoResponseDTO getEstadoByNombre(String nombre) {
 
-        //Verifica que el id no sea nulo
+        //Verifica que el nombre no sea nulo
         if (nombre == null) {
             log.warn("El nombre es obligatorio: {}", nombre);
             throw new BadRequestException("El nombre es obligatorio");
@@ -100,14 +100,19 @@ public class EstadoPeticionFlujoServiceImpl implements IEstadoPeticionFlujoServi
 
         //Verifica que el id no sea nulo
         if (id == null) {
-            log.warn("El Id es obligatorio: {}", id);
+            log.warn("El Id de Estado es obligatorio: {}", id);
             throw new BadRequestException("El Id es obligatorio");
         }
 
+        normalizeNombre(updateDTO);
+
+        validateNombreEstadoUpdate(updateDTO, id);
+
         EstadoPeticionFlujoResponseDTO updatedEstado = estadoDAO.update(id, updateDTO)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("No se encotró el estado con ID: " + id)
-                );
+                .orElseThrow(() -> {
+                    log.warn("No se encontró el estado con Id: {}", id);
+                    return new ResourceNotFoundException("No se encotró el estado con ID: " + id);
+                });
 
         log.info("Estado actualizado exitosamente ID: {}", id);
         return updatedEstado;
@@ -126,7 +131,7 @@ public class EstadoPeticionFlujoServiceImpl implements IEstadoPeticionFlujoServi
         // El DAO intenta eliminar
         boolean deleted = estadoDAO.deleteById(id);
 
-        // 404 → no existía
+        //SI es falso entonces es 404 → no existía
         if (!deleted) {
             log.warn("Intento de eliminar estado inexistente ID: {}", id);
             throw new ResourceNotFoundException("Estado no encontrado con ID: " + id);
@@ -135,10 +140,30 @@ public class EstadoPeticionFlujoServiceImpl implements IEstadoPeticionFlujoServi
         log.info("Estado eliminado correctamente ID: {}", id);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public EstadoPeticionFlujoEntity getEstadoEntityById(Long id) {
+        return estadoDAO.findEntityById(id)
+                .orElseThrow(() -> {
+                    log.warn("Entidad de estado no encontrado con Id: {}", id);
+                    return new ResourceNotFoundException("No se encotró el estado");
+                });
+    }
+
     //Validar que el nombre no exista aún
     private void validateDuplicatedName(EstadoPeticionFlujoCreateUpdateDTO createDTO) {
         if (estadoDAO.existsByNombreIgnoreCare(createDTO.getNombre())) {
             throw new ConflictException("El nombre de Estado ya está en uso, no puede duplicarse");
         }
+    }
+
+    private void validateNombreEstadoUpdate(EstadoPeticionFlujoCreateUpdateDTO updateDTO, Long id) {
+        if (estadoDAO.existsByNombreIgnoreCaseAndIdNot(updateDTO.getNombre(), id)) {
+            throw new ConflictException("El nombre de la petición ya está en uso");
+        }
+    }
+
+    private void normalizeNombre(EstadoPeticionFlujoCreateUpdateDTO dto){
+        dto.setNombre(dto.getNombre().trim().toLowerCase());
     }
 }

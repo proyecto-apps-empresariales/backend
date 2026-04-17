@@ -15,7 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RequerimientoPeticionDAO {
 
-    private IRequerimientoPeticionRepository requerimientoRepository;
+    private final IRequerimientoPeticionRepository requerimientoRepository;
 
     //Guardar requerimiento/peticion
     public RequerimientoPeticionResponseDTO save(RequerimientoPeticionCreateUpdateDTO createDTO) {
@@ -33,7 +33,14 @@ public class RequerimientoPeticionDAO {
                 .map(RequerimientoPeticionMapper::toDTO);
     }
 
-    //Buscar todos los requerimientos por id
+    //Buscar requerimiento por Nombre
+    public Optional<RequerimientoPeticionResponseDTO> findByNombre(String nombre) {
+
+        return requerimientoRepository.findByNombre(nombre)
+                .map(RequerimientoPeticionMapper::toDTO);
+    }
+
+    //Buscar todos los requerimientos
     public List<RequerimientoPeticionResponseDTO> findAll() {
 
         List<RequerimientoPeticionEntity> entities = requerimientoRepository.findAll();
@@ -65,4 +72,22 @@ public class RequerimientoPeticionDAO {
         }
         return false;
     }
+
+    //Busca si hay una entidad con el nombre, ignora mayusucla - minuscula
+    public boolean existsByNombreIgnoreCase(String nombre) {
+        return requerimientoRepository.existsByNombreIgnoreCase(nombre);
+    }
+
+    //Busca la lista de nombres y retorna las entidades encontradas
+    public List<RequerimientoPeticionEntity> findByNombreIn(List<String> nombres) {
+        return requerimientoRepository.findByNombreIn(nombres);
+    }
+
+    //Se usa para el update
+    //Busca la peticion por el nombre, si encuentra peticion por el nombre, pero el id es diferente retorna true
+    //Si es true significa que ese nombre ya lo tiene otra entidad, entonces no actualiza
+    public boolean existsByNombreIgnoreCaseAndIdNot(String nombre, Long id) {
+        return requerimientoRepository.existsByNombreIgnoreCaseAndIdNot(nombre, id);
+    }
+
 }
