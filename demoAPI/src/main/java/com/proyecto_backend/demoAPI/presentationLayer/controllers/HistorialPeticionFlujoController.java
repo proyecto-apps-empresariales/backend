@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping("/historial")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "HistorialPetición", description = "Operaciones CRUD para Hisorial de peticiones")
+@Tag(name = "Historial de Petición", description = "Operaciones CRUD para Hisorial de peticiones")
 @CrossOrigin(origins = "*")
 public class HistorialPeticionFlujoController {
 

@@ -24,7 +24,7 @@ import java.util.List;
 @RequestMapping("/firma-peticion")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "Firma Petición", description = "Operaciones CRUD para las firmas de peticiones")
+@Tag(name = "Firmas en la Petición", description = "Operaciones CRUD para las firmas de peticiones")
 @CrossOrigin(origins = "*")
 public class FirmaPeticionFlujoController {
 
