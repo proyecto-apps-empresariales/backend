@@ -58,7 +58,7 @@ public class PeticionFlujoResponseDTO {
 
     @Schema(description = "Nombre de la petición", example = "Cancelación materias Bryan Vanegas, nocturna")
     @NotBlank(message = "El nombre no puede estar vacío")
-    @Size(max = 250, message = "Debe tener máximo 50 caracteres")
+    @Size(max = 250, message = "Debe tener máximo 250 caracteres")
     private String nombre;
 
 }
