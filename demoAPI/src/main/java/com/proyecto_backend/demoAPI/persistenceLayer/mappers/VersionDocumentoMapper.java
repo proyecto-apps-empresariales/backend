@@ -19,7 +19,7 @@ public class VersionDocumentoMapper {
 
         VersionDocumentoResponseDTO dto= new VersionDocumentoResponseDTO();
         dto.setId(entity.getId());
-        dto.setUsuarioActualizador(entity.getUsuarioActualizador().getNombre());
+        dto.setUsuarioActualizador(entity.getUsuarioActualizador().getCorreo());
         dto.setDocumento(entity.getDocumento().getNombre());
         dto.setNombre(entity.getNombre());
         dto.setDescripcion(entity.getDescripcion());

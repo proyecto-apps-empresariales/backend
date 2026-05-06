@@ -32,8 +32,8 @@ public class VersionDocumentoResponseDTO {
     @NotBlank(message = "El nombre del documento no puede estar vacio")
     private String documento;
 
-    @Schema(description = "Nombre del usuario actualizador del documento", example = "Juan", accessMode = Schema.AccessMode.READ_ONLY)
-    @NotBlank(message = "El nombre del usuario no puede estar vacio")
+    @Schema(description = "Correo del usuario actualizador del documento", example = "Juan", accessMode = Schema.AccessMode.READ_ONLY)
+    @NotBlank(message = "El correo del usuario no puede estar vacio")
     private String usuarioActualizador;
 
     @Schema(description = "Nombre de la version del documento", example = "Informe- 10262026 V2")

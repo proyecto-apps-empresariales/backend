@@ -30,8 +30,8 @@ public class DocumentoResponseDTO {
     @NotNull(message = "El id no puede estar vacio")
     private long id;
 
-    @Schema(description = "Nombre del usuario creador del documento", example = "Juan", accessMode = Schema.AccessMode.READ_ONLY)
-    @NotBlank(message = "El nombre del usario creador no puede estar vacio")
+    @Schema(description = "Correo del usuario creador del documento", example = "Juan", accessMode = Schema.AccessMode.READ_ONLY)
+    @NotBlank(message = "El correo del usuario creador no puede estar vacio")
     private String usuarioCreador;
 
     @Schema(description = "Nombre del tipo de documento que usa el documento", example = "Registros de sanciones sanitarias", accessMode = Schema.AccessMode.READ_ONLY)

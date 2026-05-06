@@ -22,7 +22,7 @@ public final class DocumentoMapper {
 
         DocumentoResponseDTO dto= new DocumentoResponseDTO();
         dto.setId(entity.getId());
-        dto.setUsuarioCreador(entity.getUsuarioCreador().getNombre());
+        dto.setUsuarioCreador(entity.getUsuarioCreador().getCorreo());
         dto.setTipoDocumento(entity.getTipoDocumento().getNombre());
         dto.setNombre(entity.getNombre());
         dto.setDescripcion(entity.getDescripcion());
