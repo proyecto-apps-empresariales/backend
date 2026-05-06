@@ -5,6 +5,7 @@ import com.proyecto_backend.demoAPI.businessLayer.dtos.PeticionFlujoResponseDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.PeticionFlujoUpdateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.services.imps.PeticionFlujoServiceImpl;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.PeticionFlujoEntity;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.Usuario;
 
 import java.util.List;
 
@@ -35,5 +36,7 @@ public interface IPeticionFlujoService {
     PeticionFlujoResponseDTO firmarPeticion(Long id);
 
     PeticionFlujoResponseDTO finalizarPeticion(Long id);
+
+    public PeticionFlujoEntity getPeticionEntityById(Long id);
 
 }

@@ -1,5 +1,6 @@
 package com.proyecto_backend.demoAPI.businessLayer.dtos;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,14 +9,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Schema(description = "DTO para actualizar la información de un Permiso")
 public class PermisoUpdateDTO {
-    
-    // Atributos de la clase PermisoUpdateDTO:
-    
-    @Size(min = 3, max = 20)
+
+    @Schema(description = "Nombre del permiso", example = "GESTION USUARIOS")
+    @Size(min = 3, max = 20, message = "Debe tener entre 3 y 20 caracteres")
     private String nombre;
 
-    @Size(min = 3, max = 250)
+    @Schema(description = "Descripción del permiso", example = "Permite gestionar usuarios dentro del sistema")
+    @Size(min = 3, max = 250, message = "Debe tener entre 3 y 250 caracteres")
     private String descripcion;
-    
+
 }

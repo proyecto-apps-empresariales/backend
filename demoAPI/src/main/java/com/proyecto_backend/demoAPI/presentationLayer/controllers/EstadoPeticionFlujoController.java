@@ -24,7 +24,7 @@ import java.util.List;
 @RequestMapping("/estado-peticion")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "EstadoPeticion", description = "Operaciones CRUD para gestión de Estados de las peticiones")
+@Tag(name = "Estados de Petición", description = "Operaciones CRUD para gestión de Estados de las peticiones")
 @CrossOrigin(origins = "*")
 public class EstadoPeticionFlujoController {
     private final IEstadoPeticionFlujoService estadoService;

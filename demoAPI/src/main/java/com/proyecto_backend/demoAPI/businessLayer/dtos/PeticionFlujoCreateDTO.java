@@ -25,6 +25,10 @@ public class PeticionFlujoCreateDTO {
     @NotNull(message = "EL id del destinatario no puede ser nulo")
     private Long destinatario;
 
+    @Schema(description = "Id del documento", example = "5")
+    @NotNull(message = "EL id del documento no puede ser nulo")
+    private Long documento;
+
     @Schema(description = "Id del tipo de la petición", example = "Cancelación de materia", accessMode = Schema.AccessMode.READ_ONLY)
     @NotNull(message = "EL tipo de petición no puede ser nulo")
     private Long tipoPeticion;

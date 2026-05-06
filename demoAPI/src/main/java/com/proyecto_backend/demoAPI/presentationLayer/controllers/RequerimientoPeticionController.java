@@ -24,7 +24,7 @@ import java.util.List;
 @RequestMapping("/requerimiento-peticion")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "Requerimiento", description = "Operaciones CRUD para requerimientos")
+@Tag(name = "Requerimientos de Petición", description = "Operaciones CRUD para requerimientos")
 @CrossOrigin(origins = "*")
 public class RequerimientoPeticionController {
 
@@ -136,7 +136,8 @@ public class RequerimientoPeticionController {
     }
 
     // DELETE
-    @Operation(summary = "Eliminar requerimiento")
+    @Operation(summary = "Eliminar requerimiento",
+            description = "Elimina un requerimiento de petición con el Id")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Requerimiento eliminado"),
             @ApiResponse(responseCode = "404", description = "Requerimiento no encontrado",

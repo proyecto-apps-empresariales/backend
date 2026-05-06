@@ -1,5 +1,6 @@
 package com.proyecto_backend.demoAPI.businessLayer.dtos;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -13,20 +14,22 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "DTO para la creación de una Firma de Usuario")
 public class FirmaUsuarioCreateDTO {
-    
-    // Atributos de la clase FirmaUsuarioCreateDTO:
-    // @NotBlank valida que un String no sea null, no este vacio "" ó no contenga solo espacios " ".
-    // @Size(min = m, max = n) valida que el atributo tenga minimo m y maximo n caracteres.
-    @NotBlank
-    @Size(min = 3, max = 255)
+
+    @Schema(description = "Archivo de la firma del usuario", example = "firma_usuario.pdf")
+    @NotBlank(message = "El archivo de la firma no puede estar vacío")
+    @Size(min = 3, max = 255, message = "Debe tener entre 3 y 255 caracteres")
     private String archivoFirma;
-    @NotBlank
-    @Size(min = 3, max = 250)
+
+    @Schema(description = "Descripción de la firma del usuario", example = "Firma digital utilizada para validar documentos")
+    @NotBlank(message = "La descripción no puede estar vacía")
+    @Size(min = 3, max = 250, message = "Debe tener entre 3 y 250 caracteres")
     private String descripcion;
-    // @NotNull valida que no sea null y @Positive que sea mayor a 0.
-    @NotNull
-    @Positive
+
+    @Schema(description = "Identificador del usuario asociado a la firma", example = "101")
+    @NotNull(message = "El idUsuario no puede ser nulo")
+    @Positive(message = "El idUsuario debe ser mayor a 0")
     private Long idUsuario;
-    
+
 }

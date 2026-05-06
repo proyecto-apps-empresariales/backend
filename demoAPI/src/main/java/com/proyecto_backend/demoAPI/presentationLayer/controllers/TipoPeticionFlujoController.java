@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping("/tipo-peticion")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "TipoPeticionFlujo", description = "Operaciones CRUD para Tipos de Petición")
+@Tag(name = "Tipo de Peticion", description = "Operaciones CRUD para Tipos de Petición")
 @CrossOrigin(origins = "*")
 public class TipoPeticionFlujoController {
 
