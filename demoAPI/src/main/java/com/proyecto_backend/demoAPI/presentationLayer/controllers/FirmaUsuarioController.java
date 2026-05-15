@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/firmaUsuario")
 @RequiredArgsConstructor
 @Tag(name = "Firmas de Usuario", description = "Operaciones CRUD para gestión de firmas de usuario")
+@CrossOrigin(origins = "*")
 public class FirmaUsuarioController {
 
     private final IFirmaUsuarioService firmaUsuarioService;

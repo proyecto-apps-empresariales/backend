@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/notificaciones")
 @RequiredArgsConstructor
 @Tag(name = "Notificaciones", description = "Operaciones CRUD para gestión de notificaciones")
+@CrossOrigin(origins = "*")
 public class NotificacionController {
 
     private final INotificacionService notificacionService;

@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/organizaciones")
 @RequiredArgsConstructor
 @Tag(name = "Organizaciones", description = "Operaciones CRUD para gestión de organizaciones")
+@CrossOrigin(origins = "*")
 public class OrganizacionController {
 
     private final IOrganizacionService organizacionService;

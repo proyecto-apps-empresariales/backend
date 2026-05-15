@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/roles")
 @RequiredArgsConstructor
 @Tag(name = "Roles", description = "Operaciones CRUD para gestión de roles")
+@CrossOrigin(origins = "*")
 public class RolController {
 
     private final IRolService rolService;

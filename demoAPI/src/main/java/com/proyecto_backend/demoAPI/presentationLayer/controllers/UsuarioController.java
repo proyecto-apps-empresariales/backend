@@ -26,6 +26,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/usuarios")
 @RequiredArgsConstructor
 @Tag(name = "Usuarios", description = "Operaciones CRUD para gestión de usuarios")
+@CrossOrigin(origins = "*")
 public class UsuarioController {
 
     private final IUsuarioService usuarioService;

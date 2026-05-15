@@ -27,7 +27,7 @@ public final class PeticionFlujoMapper {
         dto.setId(entity.getId());
         dto.setRemitente(entity.getRemitente().getNombre() + " " + entity.getRemitente().getApellido());
         dto.setDestinatario(entity.getDestinatario().getNombre() + " " + entity.getDestinatario().getApellido());
-        dto.setDestinatario(entity.getDocumento().getNombre());
+        dto.setNombreDocumento(entity.getDocumento().getNombre());
         dto.setTipoPeticion(entity.getTipoPeticion().getNombre());
         dto.setEstado(entity.getEstado().getNombre());
         dto.setFechaInicio(entity.getFechaInicio());

@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/permisos")
 @RequiredArgsConstructor
 @Tag(name = "Permisos", description = "Operaciones CRUD para gestión de permisos")
+@CrossOrigin(origins = "*")
 public class PermisoController {
 
     private final IPermisoService permisoService;
