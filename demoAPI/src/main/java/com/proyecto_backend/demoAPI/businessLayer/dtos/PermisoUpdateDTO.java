@@ -5,10 +5,12 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Schema(description = "DTO para actualizar la información de un Permiso")
 public class PermisoUpdateDTO {
 
