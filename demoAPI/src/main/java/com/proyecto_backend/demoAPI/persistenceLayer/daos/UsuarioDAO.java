@@ -63,6 +63,19 @@ public class UsuarioDAO {
 
     }
 
+    // Metodo para buscar un usuario por correo, ignorando mayusculas y minusculas:
+    public Optional<Usuario> buscarUsuarioPorCorreoIgnoreCase (String correo) {
+
+        return usuarioRepository.findByCorreoIgnoreCase(correo);
+
+    }
+
+    public Optional<Usuario> buscarUsuarioEntidadPorNombre (String nombre) {
+
+        return usuarioRepository.findByNombre(nombre);
+
+    }
+
 
     // Metodo para buscar un usuario por correo y retornar la entidad (casos especiales):
     public Optional<Usuario> buscarUsuarioEntidadPorCorreo (String correoUsuario) {

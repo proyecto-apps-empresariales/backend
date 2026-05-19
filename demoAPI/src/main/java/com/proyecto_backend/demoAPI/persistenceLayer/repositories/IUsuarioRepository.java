@@ -16,5 +16,11 @@ public interface IUsuarioRepository extends JpaRepository<Usuario, Long> {
 
     // Metodo para buscar un usuario por correo:
     Optional<Usuario> findByCorreo (String correo);
+
+    // Metodo para buscar un usuario por correo, ignorando mayusculas y minusculas:
+    Optional<Usuario> findByCorreoIgnoreCase (String correo);
+
+    // Metodo para buscar un usuario por nombre:
+    Optional<Usuario> findByNombre (String nombre);
     
 }

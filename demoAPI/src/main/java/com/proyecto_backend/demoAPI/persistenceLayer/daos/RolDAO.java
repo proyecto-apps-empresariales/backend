@@ -2,12 +2,14 @@ package com.proyecto_backend.demoAPI.persistenceLayer.daos;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
 import com.proyecto_backend.demoAPI.businessLayer.dtos.RolCreateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.RolDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.RolUpdateDTO;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.Permiso;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.Rol;
 import com.proyecto_backend.demoAPI.persistenceLayer.mappers.RolMapper;
 import com.proyecto_backend.demoAPI.persistenceLayer.repositories.IRolRepository;
@@ -22,9 +24,9 @@ public class RolDAO {
     private final IRolRepository rolRepository;
 
     // Metodo para guardar un rol por medio de un RolCreateDTO:
-    public RolDTO guardarRol (RolCreateDTO dto) {
+    public RolDTO guardarRol (RolCreateDTO dto, Set<Permiso> permisos) {
 
-        Rol rol = RolMapper.toEntity(dto);
+        Rol rol = RolMapper.toEntity(dto, permisos);
 
         return RolMapper.toDTO(rolRepository.save(rol));
          

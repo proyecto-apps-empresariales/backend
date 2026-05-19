@@ -1,6 +1,8 @@
 package com.proyecto_backend.demoAPI.businessLayer.services.imps;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -10,7 +12,9 @@ import com.proyecto_backend.demoAPI.businessLayer.dtos.RolCreateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.RolDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.RolUpdateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.services.IRolService;
+import com.proyecto_backend.demoAPI.persistenceLayer.daos.PermisoDAO;
 import com.proyecto_backend.demoAPI.persistenceLayer.daos.RolDAO;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.Permiso;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +24,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RolServiceImp implements IRolService {
 
-    // Inyectamos el RolDAO:
+    // Inyectamos el RolDAO y PermisoDAO:
     private final RolDAO rolDAO;
+    private final PermisoDAO permisoDAO;
+
 
     // Metodo para guardar un rol por medio de un RolCreateDTO:
     @Override
@@ -33,8 +39,9 @@ public class RolServiceImp implements IRolService {
         if (rolDAO.buscarRolPorNombre(dto.getNombre()).isPresent()) { // 409 CONFLICT: Dato ya existente
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Nombre ya registrado");
         }
+        Set<Permiso> permisos = permisoDAO.buscarEntidadPorId(dto.getPermisosIds());
 
-        return rolDAO.guardarRol(dto);
+        return rolDAO.guardarRol(dto, permisos);
 
     }
 

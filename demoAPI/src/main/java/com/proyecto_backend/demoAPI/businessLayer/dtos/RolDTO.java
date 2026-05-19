@@ -1,5 +1,7 @@
 package com.proyecto_backend.demoAPI.businessLayer.dtos;
 
+import java.util.Set;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,5 +23,8 @@ public class RolDTO {
 
     @Schema(description = "Descripción del rol", example = "Rol con permisos de administración en el sistema")
     private String descripcion;
+
+    @Schema(description = "Permisos asociados al rol")
+    private Set<PermisoDTO> permisos;
 
 }
