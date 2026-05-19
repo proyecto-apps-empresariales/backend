@@ -36,10 +36,6 @@ public class FirmaPeticionFlujoController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Firma creada correctamente",
                     content = @Content(schema = @Schema(implementation = FirmaPeticionFlujoResponseDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Error de validación",
-                    content = @Content(schema = @Schema(implementation = ApiError.class))),
-            @ApiResponse(responseCode = "404", description = "Usuario o petición no encontrados",
-                    content = @Content(schema = @Schema(implementation = ApiError.class))),
             @ApiResponse(responseCode = "409", description = "El usuario ya firmó esta petición",
                     content = @Content(schema = @Schema(implementation = ApiError.class))),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor",
