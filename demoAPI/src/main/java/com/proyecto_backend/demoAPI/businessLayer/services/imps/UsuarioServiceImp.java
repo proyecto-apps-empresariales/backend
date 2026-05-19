@@ -101,6 +101,10 @@ public class UsuarioServiceImp implements IUsuarioService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Contraseña incorrecta");
         }
 
+        if (!usuario.isEstaActivo()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuario inactivo");
+        }
+
         return usuarioDAO.buscarUsuarioPorCorreo(correo)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
