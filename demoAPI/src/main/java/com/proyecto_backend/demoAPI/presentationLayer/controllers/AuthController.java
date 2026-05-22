@@ -9,7 +9,7 @@ import com.proyecto_backend.demoAPI.businessLayer.dtos.AuthRequest;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.AuthResponse;
 import com.proyecto_backend.demoAPI.businessLayer.services.AuthService;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 

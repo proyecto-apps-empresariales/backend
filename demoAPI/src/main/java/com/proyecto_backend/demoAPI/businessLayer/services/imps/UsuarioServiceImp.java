@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.UsuarioCreateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.UsuarioDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.UsuarioUpdateContrasenaDTO;
@@ -29,24 +29,25 @@ public class UsuarioServiceImp implements IUsuarioService {
     private final UsuarioDAO usuarioDAO;
     private final OrganizacionDAO organizacionDAO;
     private final RolDAO rolDAO;
+    private final PasswordEncoder passwordEncoder;
 
     // Metodo para guardar un usuario por medio de un UsuarioDTO:
     @Override
-    public UsuarioDTO guardarUsuario (UsuarioCreateDTO dto) {
+    public UsuarioDTO guardarUsuario(UsuarioCreateDTO dto) {
 
-        if (dto == null) { // 400 BAD_REQUEST: Datos No validos
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datos no valido");
-        }
+        if (dto == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Datos no validos");
 
-        if (usuarioDAO.buscarUsuarioPorCorreo(dto.getCorreo()).isPresent()) { // 409 CONFLICT: Dato ya existente
+        if (usuarioDAO.buscarUsuarioPorCorreo(dto.getCorreo()).isPresent())
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Correo ya registrado");
-        }
+
+        // Encriptar contraseña antes de pasarla al DAO
+        dto.setContrasena(passwordEncoder.encode(dto.getContrasena()));
 
         Organizacion organizacion = buscarOrganizacion(dto.getIdOrganizacion());
         Rol rol = buscarRol(dto.getIdRol());
 
         return usuarioDAO.guardarUsuario(dto, organizacion, rol);
-
     }
 
     // Metodo para obtener la lista de todos los usuarios:
@@ -85,29 +86,24 @@ public class UsuarioServiceImp implements IUsuarioService {
 
     // Metodo para obtener un usuario por medio de su correo y contrasena:
     @Override
-    public UsuarioDTO buscarUsuarioPorCorreoYContrasena (String correo, String contrasena) {
+    public UsuarioDTO buscarUsuarioPorCorreoYContrasena(String correo, String contrasena) {
 
-        if (correo == null) {
+        if (correo == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Correo no valido");
-        }
+        if (contrasena == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Contraseña no valida");
 
         Usuario usuario = buscarUsuarioCorreo(correo);
 
-        if (contrasena == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Contraseña no valida");
-        }
-
-        if (!usuario.getContrasenaHash().equals(contrasena)) {
+        // Comparar con BCrypt en vez de .equals()
+        if (!passwordEncoder.matches(contrasena, usuario.getContrasenaHash()))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Contraseña incorrecta");
-        }
 
-        if (!usuario.isEstaActivo()) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuario inactivo");
-        }
+        if (!usuario.isEstaActivo())
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Usuario inactivo");
 
         return usuarioDAO.buscarUsuarioPorCorreo(correo)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
-
     }
 
     // Metodo para obtener la lista de usuarios por Organizacion:
@@ -141,19 +137,21 @@ public class UsuarioServiceImp implements IUsuarioService {
 
     // Metodo para actualizar la contrasena de un usuario:
     @Override
-    public UsuarioDTO actualizarContrasena (UsuarioUpdateContrasenaDTO dto) {
+    public UsuarioDTO actualizarContrasena(UsuarioUpdateContrasenaDTO dto) {
 
         Usuario usuario = buscarUsuarioEntityById(dto.getIdUsuario());
 
         validarContrasenas(dto);
 
-        if (!usuario.getContrasenaHash().equals(dto.getContrasenaActual())) {
+        // Comparar contraseña actual con BCrypt
+        if (!passwordEncoder.matches(dto.getContrasenaActual(), usuario.getContrasenaHash()))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Contraseña incorrecta");
-        }
 
-        return usuarioDAO.actualizarContrasena(dto.getIdUsuario(), dto.getContrasenaNueva())
+        // Encriptar la nueva contraseña antes de guardar
+        String nuevaHash = passwordEncoder.encode(dto.getContrasenaNueva());
+
+        return usuarioDAO.actualizarContrasena(dto.getIdUsuario(), nuevaHash)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
-
     }
 
     // Metodo para eliminar un usuario:

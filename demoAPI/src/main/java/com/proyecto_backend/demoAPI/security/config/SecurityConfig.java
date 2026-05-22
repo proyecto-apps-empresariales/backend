@@ -55,12 +55,14 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/api-docs/**"
                         ).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth").permitAll()
                         .requestMatchers(HttpMethod.GET, "/documentos/**", "/estado-peticion/**", "/firma-peticion/**", "/firmaUsuario/**", "/historial/**", "/notificaciones/**", "/organizaciones/**", "/permisos/**", "/peticion/**", "/plantillaDocumento/**", "/requerimientoDocumento/**", "/requerimiento-peticion/**", "/roles/**", "/tipoDocumento/**", "/tipo-peticion/**", "/usuarios/**", "/versiones/**")
-                        .hasAnyRole("ADMIN", "SELLER", "CLIENT")
+                        .hasAnyRole("ADMIN", "EDITOR", "VIEWER")
                         .requestMatchers(HttpMethod.POST, "/documentos/**", "/estado-peticion/**", "/firma-peticion/**", "/firmaUsuario/**", "/historial/**", "/notificaciones/**", "/organizaciones/**", "/permisos/**", "/peticion/**", "/plantillaDocumento/**", "/requerimientoDocumento/**", "/requerimiento-peticion/**", "/roles/**", "/tipoDocumento/**", "/tipo-peticion/**", "/usuarios/**", "/versiones/**")
-                        .hasAnyRole("ADMIN", "SELLER")
+                        .hasAnyRole("ADMIN", "EDITOR")
                         .requestMatchers(HttpMethod.PUT, "/documentos/**", "/estado-peticion/**", "/firma-peticion/**", "/firmaUsuario/**", "/historial/**", "/notificaciones/**", "/organizaciones/**", "/permisos/**", "/peticion/**", "/plantillaDocumento/**", "/requerimientoDocumento/**", "/requerimiento-peticion/**", "/roles/**", "/tipoDocumento/**", "/tipo-peticion/**", "/usuarios/**", "/versiones/**")
-                        .hasAnyRole("ADMIN", "SELLER")
+                        .hasAnyRole("ADMIN", "EDITOR")
                         .requestMatchers(HttpMethod.DELETE, "/documentos/**", "/estado-peticion/**", "/firma-peticion/**", "/firmaUsuario/**", "/historial/**", "/notificaciones/**", "/organizaciones/**", "/permisos/**", "/peticion/**", "/plantillaDocumento/**", "/requerimientoDocumento/**", "/requerimiento-peticion/**", "/roles /**", "/tipoDocumento /**", "/tipo-peticion /**", "/usuarios /**", "/versiones /**")
                         .hasRole("ADMIN")
                         .anyRequest().denyAll()

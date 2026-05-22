@@ -1,8 +1,10 @@
 package com.proyecto_backend.demoAPI.businessLayer.services.imps;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,6 +25,7 @@ public class SecurityUserDetailsService implements UserDetailsService{
      * nombre de usuario exacto (compatibilidad con cuentas antiguas / scripts).
      */
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String loginOrLegacyUsername) throws UsernameNotFoundException {
         if (loginOrLegacyUsername == null || loginOrLegacyUsername.isBlank()) {
             throw new UsernameNotFoundException("Credenciales no válidas");
@@ -33,14 +36,16 @@ public class SecurityUserDetailsService implements UserDetailsService{
                 .or(() -> usuarioDAO.buscarUsuarioEntidadPorNombre(trimmed))
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
-        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRol().getNombre());
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + user.getRol().getNombre().toUpperCase());
+
 
         return User.builder()
-                .username(user.getNombre())
+                .username(user.getCorreo())
                 .password(user.getContrasenaHash())
                 .authorities(authority)
                 .disabled(!user.isEstaActivo())
                 .build();
+
     }
     
 }

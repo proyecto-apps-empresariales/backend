@@ -7,8 +7,10 @@ import com.proyecto_backend.demoAPI.persistenceLayer.daos.UsuarioDAO;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.Usuario;
 import com.proyecto_backend.demoAPI.security.jwt.JwtService;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -29,6 +31,7 @@ public class AuthServiceImpl implements AuthService{
 
     // Implementación del método de autenticación
     @Override
+    @Transactional
     public AuthResponse login(AuthRequest authRequest) {
         
         String loginKey = authRequest.correo().trim().toLowerCase(Locale.ROOT);
@@ -37,7 +40,7 @@ public class AuthServiceImpl implements AuthService{
         );
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Usuario user = usuarioDAO.buscarUsuarioEntidadPorNombre(userDetails.getUsername())
+        Usuario user = usuarioDAO.buscarUsuarioEntidadPorCorreo(userDetails.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Usuario autenticado no encontrado en persistencia"));
 
         String token = jwtService.generateToken(userDetails);
@@ -50,9 +53,14 @@ public class AuthServiceImpl implements AuthService{
                 token,
                 "Bearer",
                 jwtService.getJwtExpirationSeconds(),
+                user.getIdUsuario(),
                 user.getNombre(),
                 user.getCorreo(),
-                roles
+                user.getApellido(),
+                user.getCelular(),
+                user.getOrganizacion() != null ? user.getOrganizacion().getNombre() : null,
+                roles,  // ← usar la lista de roles que ya tienes arriba
+                user.isEstaActivo()
         );
 
     }
