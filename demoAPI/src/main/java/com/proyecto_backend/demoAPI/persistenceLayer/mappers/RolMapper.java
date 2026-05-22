@@ -1,10 +1,14 @@
 package com.proyecto_backend.demoAPI.persistenceLayer.mappers;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.proyecto_backend.demoAPI.businessLayer.dtos.PermisoDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.RolCreateDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.RolDTO;
 import com.proyecto_backend.demoAPI.businessLayer.dtos.RolUpdateDTO;
+import com.proyecto_backend.demoAPI.persistenceLayer.entities.Permiso;
 import com.proyecto_backend.demoAPI.persistenceLayer.entities.Rol;
 
 public class RolMapper {
@@ -20,16 +24,19 @@ public class RolMapper {
         dto.setIdRol(rol.getIdRol());
         dto.setNombre(rol.getNombre());
         dto.setDescripcion(rol.getDescripcion());
+        Set<PermisoDTO> permisosDTO = rol.getPermisos().stream().map(PermisoMapper::toDTO).collect(Collectors.toSet());
+        dto.setPermisos(permisosDTO);
 
         return dto;
     }
 
     // Metodo para convertir un RolCreateDTO --> Rol:
-    public static Rol toEntity (RolCreateDTO dto) {
+    public static Rol toEntity (RolCreateDTO dto, Set<Permiso> permisos) {
 
         Rol rol = new Rol();
         rol.setNombre(dto.getNombre());
         rol.setDescripcion(dto.getDescripcion());
+        rol.setPermisos(permisos);
 
         return rol;
     }

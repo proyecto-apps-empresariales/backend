@@ -2,6 +2,8 @@ package com.proyecto_backend.demoAPI.persistenceLayer.daos;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
@@ -43,6 +45,13 @@ public class PermisoDAO {
     public Optional<PermisoDTO> buscarPorId (Long idPermiso) {
 
         return permisoRepository.findById(idPermiso).map(PermisoMapper::toDTO);
+
+    }
+
+    // 
+    public Set<Permiso> buscarEntidadPorId (Set<Long> idPermisos) {
+
+        return permisoRepository.findAllById(idPermisos).stream().collect(Collectors.toSet());
 
     }
 
