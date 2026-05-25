@@ -25,6 +25,7 @@ public final class FirmaPeticionFlujoMapper {
         dto.setPeticion(entity.getPeticion().getNombre());
         dto.setFechaFirma(entity.getFechaFirma());
         dto.setObservacion(entity.getObservacion());
+        dto.setUsuarioFirmador(entity.getUsuario().getNombre());
 
         return dto;
     }

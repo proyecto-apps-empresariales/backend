@@ -65,7 +65,16 @@ public class SecurityConfig {
                         .hasAnyRole("ADMIN", "EDITOR")
                         .requestMatchers(HttpMethod.DELETE, "/documentos/**", "/estado-peticion/**", "/firma-peticion/**", "/firmaUsuario/**", "/historial/**", "/notificaciones/**", "/organizaciones/**", "/permisos/**", "/peticion/**", "/plantillaDocumento/**", "/requerimientoDocumento/**", "/requerimiento-peticion/**", "/roles /**", "/tipoDocumento /**", "/tipo-peticion /**", "/usuarios /**", "/versiones /**")
                         .hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH,
+                                "/documentos/**", "/estado-peticion/**", "/firma-peticion/**",
+                                "/firmaUsuario/**", "/historial/**", "/notificaciones/**",
+                                "/organizaciones/**", "/permisos/**", "/peticion/**",
+                                "/plantillaDocumento/**", "/requerimientoDocumento/**",
+                                "/requerimiento-peticion/**", "/roles/**", "/tipoDocumento/**",
+                                "/tipo-peticion/**", "/usuarios/**", "/versiones/**")
+                        .hasAnyRole("ADMIN", "EDITOR")
                         .anyRequest().denyAll()
+
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -93,7 +102,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(allowedOrigins.split(",")));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
 
