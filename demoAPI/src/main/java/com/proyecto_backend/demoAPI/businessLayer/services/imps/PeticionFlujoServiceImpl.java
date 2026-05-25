@@ -28,6 +28,7 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
     private final IEstadoPeticionFlujoService estadoService;
     private final ITipoPeticionFlujoService tipoPeticionService;
     private final IDocumentoService documentoService;
+    private final IHistorialPeticionFlujoService historialService;
 
     @Override
     @Transactional
@@ -226,7 +227,16 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
 //    APROBADO  3
 //    RECHAZADO	4
 //    FIRMADO	5
-//    FINALIZADO    6
+//    FINALIZADO 6
+
+    private void registrarHistorial(PeticionFlujoEntity peticion, String descripcion) {
+        // Usa el destinatario como editor (quien hace la acción)
+        HistorialPeticionFlujoEntity historial = new HistorialPeticionFlujoEntity();
+        historial.setPeticion(peticion);
+        historial.setUsuarioEditor(peticion.getDestinatario()); // o el usuario autenticado
+        historial.setDescripcion(descripcion);
+        historialService.createHistorial(historial);
+    }
 
     //Enviar a revisión (CREADO → EN_REVISION)
     @Override
@@ -240,12 +250,17 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
         EstadoPeticionFlujoEntity estadoRevision =
                 estadoService.getEstadoEntityById(2L);
 
-        return peticionDAO.cambiarEstado(id, 1L, estadoRevision)
+         PeticionFlujoResponseDTO resultado=peticionDAO.cambiarEstado(id, 1L, estadoRevision)
                 .orElseThrow(() ->
                         new ConflictException(
                                 "La petición no existe o no está en estado CREADO"
                         )
                 );
+
+        PeticionFlujoEntity entity = peticionDAO.findEntityById(id).get();
+        registrarHistorial(entity, "Petición enviada a revisión");
+
+         return resultado;
     }
 
     //Aprobar petición (EN_REVISION → APROBADO)
@@ -260,12 +275,17 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
         EstadoPeticionFlujoEntity estadoAprobado =
                 estadoService.getEstadoEntityById(3L);
 
-        return peticionDAO.cambiarEstado(id, 2L, estadoAprobado)
+        PeticionFlujoResponseDTO resultado= peticionDAO.cambiarEstado(id, 2L, estadoAprobado)
                 .orElseThrow(() ->
                         new ConflictException(
                                 "La petición no existe o no está en estado EN_REVISION."
                         )
                 );
+
+        PeticionFlujoEntity entity = peticionDAO.findEntityById(id).get();
+        registrarHistorial(entity, "Petición APROBADA");
+
+        return resultado;
     }
 
     //Rechazar petición (EN_REVISION → RECHAZADO)
@@ -280,12 +300,17 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
         EstadoPeticionFlujoEntity estadoRechazado =
                 estadoService.getEstadoEntityById(4L);
 
-        return peticionDAO.cambiarEstado(id, 2L, estadoRechazado)
+        PeticionFlujoResponseDTO resultado= peticionDAO.cambiarEstado(id, 2L, estadoRechazado)
                 .orElseThrow(() ->
                         new ConflictException(
                                 "La petición no existe o no está en estado -> EN_REVISION"
                         )
                 );
+
+        PeticionFlujoEntity entity = peticionDAO.findEntityById(id).get();
+        registrarHistorial(entity, "Petición RECHAZADA");
+
+        return resultado;
     }
 
     @Override
@@ -299,12 +324,17 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
         EstadoPeticionFlujoEntity estadoFirmado =
                 estadoService.getEstadoEntityById(5L);
 
-        return peticionDAO.cambiarEstado(id, 3L, estadoFirmado)
+        PeticionFlujoResponseDTO resultado= peticionDAO.cambiarEstado(id, 3L, estadoFirmado)
                 .orElseThrow(() ->
                         new ConflictException(
                                 "La petición no existe o no está en estado EN_REVISION"
                         )
                 );
+
+        PeticionFlujoEntity entity = peticionDAO.findEntityById(id).get();
+        registrarHistorial(entity, "Petición FIRMADA");
+
+        return resultado;
     }
 
     @Override
@@ -318,12 +348,17 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
         EstadoPeticionFlujoEntity estadoFinalizado =
                 estadoService.getEstadoEntityById(6L);
 
-        return peticionDAO.cambiarEstado(id, 5L, estadoFinalizado)
+        PeticionFlujoResponseDTO resultado= peticionDAO.cambiarEstado(id, 5L, estadoFinalizado)
                 .orElseThrow(() ->
                         new ConflictException(
                                 "La petición no existe o no está en estado FIRMADO"
                         )
                 );
+
+        PeticionFlujoEntity entity = peticionDAO.findEntityById(id).get();
+        registrarHistorial(entity, "Petición FINALIZADA");
+
+        return resultado;
     }
 
 

@@ -59,7 +59,7 @@ public class AuthServiceImpl implements AuthService{
                 user.getApellido(),
                 user.getCelular(),
                 user.getOrganizacion() != null ? user.getOrganizacion().getNombre() : null,
-                roles,  // ← usar la lista de roles que ya tienes arriba
+                roles,
                 user.isEstaActivo()
         );
 
