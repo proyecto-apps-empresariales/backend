@@ -233,7 +233,7 @@ public class PeticionFlujoServiceImpl implements IPeticionFlujoService {
         // Usa el destinatario como editor (quien hace la acción)
         HistorialPeticionFlujoEntity historial = new HistorialPeticionFlujoEntity();
         historial.setPeticion(peticion);
-        historial.setUsuarioEditor(peticion.getDestinatario()); // o el usuario autenticado
+        historial.setUsuarioEditor(peticion.getDestinatario());
         historial.setDescripcion(descripcion);
         historialService.createHistorial(historial);
     }
